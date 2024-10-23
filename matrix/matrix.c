@@ -125,7 +125,32 @@ Matrix *matrix_scalar_multiply(Matrix *M, double scalar) {
   for (unsigned int row = 0; row < M->rows; ++row) {
     for (unsigned int column = 0; column < M->columns; ++column) {
       matrix_set(C, row, column, scalar * matrix_get(M, row, column));
-      ;
+    }
+  }
+
+  return C;
+}
+
+Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
+  // "Let A and B have orders r×p and p×c, respectively, so that the number of
+  // columns of A equals the number of rows of B..."
+  assert(A->columns == B->rows);
+
+  double common_dimension = A->columns;
+
+  // "Then the product AB is defined to be the matrix C of order r×c..."
+  Matrix *C = matrix_create(A->rows, B->columns);
+
+  // TODO Write using vectors, dot product
+  for (unsigned int row = 0; row < A->rows; ++row) {
+    for (unsigned int column = 0; column < B->columns; ++column) {
+      double sum = 0.0;
+
+      for (unsigned int index = 0; index < common_dimension; ++index) {
+        sum += matrix_get(A, row, index) * matrix_get(B, index, column);
+      }
+
+      matrix_set(C, row, column, sum);
     }
   }
 

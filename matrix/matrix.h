@@ -66,3 +66,8 @@ Matrix *matrix_add(Matrix *A, Matrix *B);
  * Calculates the result of multiplying the matrix `M` by `scalar`.
  */
 Matrix *matrix_scalar_multiply(Matrix *M, double scalar);
+
+/*
+ * Calculates the result of multiplying `A``B`.
+ */
+Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B);

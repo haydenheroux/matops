@@ -1,15 +1,17 @@
 #include <matrix.h>
-#include <stdio.h>
 #include <test.h>
 #include <vector.h>
 
 /*
  * 1.1 Find A·B and B·Cᵀ for
- * A = [2 3 4], B = [5 6 -7], C = [7 -8 -8]
+ * A = [2 3 4]
+ * B = [5 6 -7]
+ * C = [7 -8 -8]
+ *
  * A·B = 0
  * B·Cᵀ = 50
  */
-void chapter_1_1() {
+void problem_1_1() {
   Vector *A = vector_create(3);
   vector_set(A, 0, 2);
   vector_set(A, 1, 3);
@@ -20,6 +22,7 @@ void chapter_1_1() {
   vector_set(B, 1, 6);
   vector_set(B, 2, -7);
 
+  // NOTE C = Cᵀ with these vectors
   Vector *C = vector_create(3);
   vector_set(C, 0, 7);
   vector_set(C, 1, -8);
@@ -33,10 +36,10 @@ void chapter_1_1() {
  * 1.2 Show that A+B = B+A for
  * A = [ 0 1
  *       2 3 ]
- * B = [ 4 5
+ * B = [ 4  5
  *       6 -7 ]
  */
-void chapter_1_2() {
+void problem_1_2() {
   Matrix *A = matrix_create(2, 2);
   matrix_set(A, 0, 0, 0);
   matrix_set(A, 0, 1, 1);
@@ -57,10 +60,11 @@ void chapter_1_2() {
 
 /*
  * 1.3 Find 3A - 0.5B for the matrices of Problem 1.2
+ *
  * 3A - 0.5B = [ -2  0.5
  *                3 12.5 ]
  */
-void chapter_1_3() {
+void problem_1_3() {
   Matrix *A = matrix_create(2, 2);
   matrix_set(A, 0, 0, 0);
   matrix_set(A, 0, 1, 1);
@@ -88,9 +92,49 @@ void chapter_1_3() {
   test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_equal(A_B_, R));
 }
 
+/*
+ * 1.4 Find AB and BA for the matrices of Problem 1.2
+ *
+ * AB = [  6  -7
+ *        26 -11 ]
+ * BA = [  10  19
+ *        -14 -15 ]
+ */
+void problem_1_4() {
+  Matrix *A = matrix_create(2, 2);
+  matrix_set(A, 0, 0, 0);
+  matrix_set(A, 0, 1, 1);
+  matrix_set(A, 1, 0, 2);
+  matrix_set(A, 1, 1, 3);
+
+  Matrix *B = matrix_create(2, 2);
+  matrix_set(B, 0, 0, 4);
+  matrix_set(B, 0, 1, 5);
+  matrix_set(B, 1, 0, 6);
+  matrix_set(B, 1, 1, -7);
+
+  Matrix *AB = matrix_matrix_multiply(A, B);
+  Matrix *BA = matrix_matrix_multiply(B, A);
+
+  Matrix *R_AB = matrix_create(2, 2);
+  matrix_set(R_AB, 0, 0, 6);
+  matrix_set(R_AB, 0, 1, -7);
+  matrix_set(R_AB, 1, 0, 26);
+  matrix_set(R_AB, 1, 1, -11);
+
+  Matrix *R_BA = matrix_create(2, 2);
+  matrix_set(R_BA, 0, 0, 10);
+  matrix_set(R_BA, 0, 1, 19);
+  matrix_set(R_BA, 1, 0, -14);
+  matrix_set(R_BA, 1, 1, -15);
+
+  test("AB = R_AB", "AB ≠ R_AB", matrix_equal(AB, R_AB));
+  test("BA = R_BA", "BA ≠ R_BA", matrix_equal(BA, R_BA));
+}
+
 int main() {
-  chapter_1_1();
-  chapter_1_2();
-  chapter_1_3();
-  return 0;
+  problem_1_1();
+  problem_1_2();
+  problem_1_3();
+  problem_1_4();
 }
