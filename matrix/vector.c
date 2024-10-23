@@ -1,9 +1,9 @@
-#include "vector.h"
 #include <assert.h>
 #include <stdlib.h>
+#include <vector.h>
 
 Vector *vector_create(unsigned int dimension) {
-  Vector *V = (Vector *)malloc(sizeof(Vector));
+  Vector *V = malloc(sizeof(Vector));
 
   double *elements = calloc(dimension, sizeof(double));
 

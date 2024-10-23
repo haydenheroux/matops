@@ -22,7 +22,7 @@ Vector *vector_create(unsigned int dimension);
 void vector_delete(Vector *V);
 
 /*
- * Sets the element of `vec` at `index` to `value`.
+ * Sets the element at `index` to `value`.
  */
 void vector_set(Vector *V, unsigned int index, double value);
 
