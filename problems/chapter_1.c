@@ -53,7 +53,6 @@ void problem_1_1() {
  */
 void problem_1_2() {
   Matrix *A = matrix_create(2, 2);
-  matrix_set(A, 0, 0, 0);
   matrix_set(A, 0, 1, 1);
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 3);
@@ -67,7 +66,7 @@ void problem_1_2() {
   Matrix *A_B = matrix_add(A, B);
   Matrix *B_A = matrix_add(B, A);
 
-  test("A+B = B+A", "A+B ≠ B+A", matrix_equal(A_B, B_A));
+  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_B, B_A));
 }
 
 /*
@@ -80,7 +79,6 @@ void problem_1_2() {
  */
 void problem_1_3() {
   Matrix *A = matrix_create(2, 2);
-  matrix_set(A, 0, 0, 0);
   matrix_set(A, 0, 1, 1);
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 3);
@@ -103,7 +101,7 @@ void problem_1_3() {
   matrix_set(R, 1, 0, 3);
   matrix_set(R, 1, 1, 12.5);
 
-  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_equal(A_B_, R));
+  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_B_, R));
 }
 
 /*
@@ -119,7 +117,6 @@ void problem_1_3() {
  */
 void problem_1_4() {
   Matrix *A = matrix_create(2, 2);
-  matrix_set(A, 0, 0, 0);
   matrix_set(A, 0, 1, 1);
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 3);
@@ -145,10 +142,10 @@ void problem_1_4() {
   matrix_set(R_BA, 1, 0, -14);
   matrix_set(R_BA, 1, 1, -15);
 
-  test("AB = R_AB", "AB ≠ R_AB", matrix_equal(AB, R_AB));
-  test("BA = R_BA", "BA ≠ R_BA", matrix_equal(BA, R_BA));
+  test("AB = R_AB", "AB ≠ R_AB", matrix_are_equal(AB, R_AB));
+  test("BA = R_BA", "BA ≠ R_BA", matrix_are_equal(BA, R_BA));
   // "Note that, for these matrices, AB ≠ BA."
-  test("AB ≠ BA", "AB = BA", !matrix_equal(AB, BA));
+  test("AB ≠ BA", "AB = BA", !matrix_are_equal(AB, BA));
 }
 
 /*
@@ -179,7 +176,6 @@ void problem_1_5() {
   Matrix *B = matrix_create(2, 2);
   matrix_set(B, 0, 0, 7);
   matrix_set(B, 0, 1, 8);
-  matrix_set(B, 1, 0, 0);
   matrix_set(B, 1, 1, -9);
 
   Matrix *AB = matrix_matrix_multiply(A, B);
@@ -194,7 +190,7 @@ void problem_1_5() {
   matrix_set(R_BA, 1, 2, -54);
 
   test("AB = NULL", "AB ≠ NULL", AB == NULL);
-  test("BA = R_BA", "BA ≠ R_BA", matrix_equal(BA, R_BA));
+  test("BA = R_BA", "BA ≠ R_BA", matrix_are_equal(BA, R_BA));
 }
 
 /*
@@ -214,7 +210,6 @@ void problem_1_6() {
   Matrix *B = matrix_create(2, 2);
   matrix_set(B, 0, 0, 7);
   matrix_set(B, 0, 1, 8);
-  matrix_set(B, 1, 0, 0);
   matrix_set(B, 1, 1, -9);
 
   Matrix *A_T = matrix_transpose(A);
@@ -224,7 +219,7 @@ void problem_1_6() {
   Matrix *BA = matrix_matrix_multiply(B, A);
   Matrix *BA_T = matrix_transpose(BA);
 
-  test("(BA)ᵀ = AᵀBᵀ", "(BA)ᵀ ≠ AᵀBᵀ", matrix_equal(BA_T, A_T_B_T));
+  test("(BA)ᵀ = AᵀBᵀ", "(BA)ᵀ ≠ AᵀBᵀ", matrix_are_equal(BA_T, A_T_B_T));
 }
 
 /*
@@ -256,10 +251,8 @@ void problem_1_7() {
   Matrix *A = matrix_create(3, 3);
   matrix_set(A, 0, 0, 4);
   matrix_set(A, 0, 1, 2);
-  matrix_set(A, 0, 2, 0);
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 1);
-  matrix_set(A, 1, 2, 0);
   matrix_set(A, 2, 0, -2);
   matrix_set(A, 2, 1, -1);
   matrix_set(A, 2, 2, 1);
@@ -279,7 +272,6 @@ void problem_1_7() {
   matrix_set(C, 0, 0, 3);
   matrix_set(C, 0, 1, 1);
   matrix_set(C, 0, 2, -3);
-  matrix_set(C, 1, 0, 0);
   matrix_set(C, 1, 1, 2);
   matrix_set(C, 1, 2, 6);
   matrix_set(C, 2, 0, -1);
@@ -292,10 +284,8 @@ void problem_1_7() {
   Matrix *R_AB = matrix_create(3, 3);
   matrix_set(R_AB, 0, 0, 12);
   matrix_set(R_AB, 0, 1, 8);
-  matrix_set(R_AB, 0, 2, 0);
   matrix_set(R_AB, 1, 0, 6);
   matrix_set(R_AB, 1, 1, 4);
-  matrix_set(R_AB, 1, 2, 0);
   matrix_set(R_AB, 2, 0, -7);
   matrix_set(R_AB, 2, 1, -2);
   matrix_set(R_AB, 2, 2, 1);
@@ -303,19 +293,93 @@ void problem_1_7() {
   Matrix *R_AC = matrix_create(3, 3);
   matrix_set(R_AC, 0, 0, 12);
   matrix_set(R_AC, 0, 1, 8);
-  matrix_set(R_AC, 0, 2, 0);
   matrix_set(R_AC, 1, 0, 6);
   matrix_set(R_AC, 1, 1, 4);
-  matrix_set(R_AC, 1, 2, 0);
   matrix_set(R_AC, 2, 0, -7);
   matrix_set(R_AC, 2, 1, -2);
   matrix_set(R_AC, 2, 2, 1);
 
-  test("AB = R_AB", "AB ≠ R_AB", matrix_equal(AB, R_AB));
-  test("AC = R_AC", "AC ≠ R_AC", matrix_equal(AC, R_AC));
+  test("AB = R_AB", "AB ≠ R_AB", matrix_are_equal(AB, R_AB));
+  test("AC = R_AC", "AC ≠ R_AC", matrix_are_equal(AC, R_AC));
   // "Note that, for these matrices, AB = AC and yet B ≠ C."
-  test("AB = AC", "AB ≠ AC", matrix_equal(AB, AC));
-  test("B ≠ C", "B = C", !matrix_equal(B, C));
+  test("AB = AC", "AB ≠ AC", matrix_are_equal(AB, AC));
+  test("B ≠ C", "B = C", !matrix_are_equal(B, C));
+}
+
+/*
+ * Problem 1.11
+ *
+ * Determine which of the following matrices are in row-echelon form:
+ *
+ * A = [ 1 2 -1 0
+ *       0 0  1 4
+ *       0 0  0 0 ]
+ *
+ * B = [ 0 1 4
+ *       1 2 3 ]
+ *
+ * C = [ 0 2 4
+ *       0 0 1 ]
+ *
+ * D = [ 0 1 0 4
+ *       0 0 1 3
+ *       0 0 0 1 ]
+ *
+ * E = [ 1 2 3
+ *       4 9 7 ]
+ */
+void problem_1_11() {
+  Matrix *A = matrix_create(3, 4);
+  matrix_set(A, 0, 0, 1);
+  matrix_set(A, 0, 1, 2);
+  matrix_set(A, 0, 2, -1);
+  matrix_set(A, 1, 2, 1);
+  matrix_set(A, 1, 3, 4);
+
+  Matrix *B = matrix_create(2, 3);
+  matrix_set(B, 0, 1, 1);
+  matrix_set(B, 0, 2, 4);
+  matrix_set(B, 1, 0, 1);
+  matrix_set(B, 1, 1, 2);
+  matrix_set(B, 1, 2, 3);
+
+  Matrix *C = matrix_create(2, 3);
+  matrix_set(C, 0, 1, 2);
+  matrix_set(C, 0, 2, 4);
+  matrix_set(C, 1, 2, 1);
+
+  Matrix *D = matrix_create(3, 4);
+  matrix_set(D, 0, 1, 1);
+  matrix_set(D, 0, 3, 4);
+  matrix_set(D, 1, 2, 1);
+  matrix_set(D, 1, 3, 3);
+  matrix_set(D, 2, 3, 1);
+
+  Matrix *E = matrix_create(2, 3);
+  matrix_set(E, 0, 0, 1);
+  matrix_set(E, 0, 1, 2);
+  matrix_set(E, 0, 2, 3);
+  matrix_set(E, 1, 0, 4);
+  matrix_set(E, 1, 1, 9);
+  matrix_set(E, 1, 2, 7);
+
+  // "Only A and D are in row-echelon form"
+  test("A is in row-echelon form", "A is not in row-echelon form",
+       matrix_is_row_echelon(A));
+  test("D is in row-echelon form", "D is not in row-echelon form",
+       matrix_is_row_echelon(D));
+  // "B is not, because the first nonzero element in the second row is further
+  // left than the first nonzero element in the top row, violating R4"
+  test("B is not in row-echelon form", "B is in row-echelon form",
+       !matrix_is_row_echelon(B));
+  // "Condition R2 is violated in the first row of C
+  test("C is not in row-echelon form", "C is in row-echelon form",
+       !matrix_is_row_echelon(C));
+  // "Matrix E violates condition R3, because the first nonzero element in the
+  // lower row appears in the same column as the first nonzero element in the
+  // upper row"
+  test("E is not in row-echelon form", "E is in row-echelon form",
+       !matrix_is_row_echelon(E));
 }
 
 int main() {
@@ -326,4 +390,5 @@ int main() {
   problem_1_5();
   problem_1_6();
   problem_1_7();
+  problem_1_11();
 }

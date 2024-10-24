@@ -50,12 +50,12 @@ Matrix *matrix_transpose(Matrix *M);
 /*
  * Compares the order of two matrices.
  */
-bool matrix_same_order(Matrix *A, Matrix *B);
+bool matrix_are_same_order(Matrix *A, Matrix *B);
 
 /*
  * Tests the equality of two matrices.
  */
-bool matrix_equal(Matrix *A, Matrix *B);
+bool matrix_are_equal(Matrix *A, Matrix *B);
 
 /*
  * Calculates the result of adding two constant matrices.
@@ -75,3 +75,18 @@ Matrix *matrix_scalar_multiply(Matrix *M, double scalar);
  * If the matrices have different order, returns NULL.
  */
 Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B);
+
+/*
+ * Tests whether a matrix is in row-echelon form.
+ */
+bool matrix_is_row_echelon(Matrix *M);
+
+/*
+ * Converts a matrix to row-echelon form.
+ */
+Matrix *matrix_row_echelon(Matrix *M);
+
+/*
+ * Calculates the row rank of a matrix.
+ */
+unsigned int matrix_row_rank(Matrix *M);

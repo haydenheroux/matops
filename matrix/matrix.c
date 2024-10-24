@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define INDEX(i, j, r) (r * i) + j
-
 Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   Matrix *M = malloc(sizeof(Matrix));
 
@@ -82,12 +80,12 @@ Matrix *matrix_transpose(Matrix *M) {
   return M_T;
 }
 
-bool matrix_same_order(Matrix *A, Matrix *B) {
+bool matrix_are_same_order(Matrix *A, Matrix *B) {
   return A->rows == B->rows && A->columns == B->columns;
 }
 
-bool matrix_equal(Matrix *A, Matrix *B) {
-  if (!matrix_same_order(A, B))
+bool matrix_are_equal(Matrix *A, Matrix *B) {
+  if (!matrix_are_same_order(A, B))
     return false;
 
   for (unsigned int row = 0; row < A->rows; ++row) {
@@ -104,7 +102,7 @@ bool matrix_equal(Matrix *A, Matrix *B) {
 
 Matrix *matrix_add(Matrix *A, Matrix *B) {
   // "The sum A+B of two matrices A and B having the same order..."
-  if (!matrix_same_order(A, B)) {
+  if (!matrix_are_same_order(A, B)) {
     return NULL;
   }
 
@@ -159,4 +157,47 @@ Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
   }
 
   return C;
+}
+
+bool matrix_is_row_echelon(Matrix *M) {
+  bool leading_column_defined = false;
+  // NOTE Comparison between signed and unsigned has weird behavior?
+  // NOTE Setting the initial value to -1 breaks things...
+  unsigned int leading_column = 0;
+
+  for (unsigned int row = 0; row < M->rows; ++row) {
+    unsigned int column = 0;
+
+    while (column < M->columns && matrix_get(M, row, column) == 0) {
+      column++;
+    }
+
+    if (column == M->columns) {
+      continue;
+    }
+
+    if (matrix_get(M, row, column) != 1) {
+      return false;
+    }
+
+    if (leading_column_defined && column <= leading_column) {
+      return false;
+    }
+
+    leading_column_defined = true;
+    leading_column = column;
+  }
+
+  return true;
+}
+
+Matrix *matrix_row_echelon(Matrix *M) {
+  Matrix *C = matrix_copy(M);
+  // TODO
+  return C;
+}
+
+unsigned int matrix_row_rank(Matrix *M) {
+  // TODO
+  return 0;
 }
