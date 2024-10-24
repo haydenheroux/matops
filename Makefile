@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Imatrix -Itest
+CFLAGS = -Wall -Imatrix -Itest -g
 
 BIN_DIR = bin
 OBJ_DIR = obj

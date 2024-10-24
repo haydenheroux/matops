@@ -24,14 +24,14 @@ void matrix_delete(Matrix *M) {
 }
 
 double matrix_get(Matrix *M, unsigned int row, unsigned int column) {
-  unsigned int index = row * M->rows + column;
+  unsigned int index = row * M->columns + column;
 
   return M->elements[index];
 }
 
 double matrix_set(Matrix *M, unsigned int row, unsigned int column,
                   double value) {
-  unsigned int index = row * M->rows + column;
+  unsigned int index = row * M->columns + column;
 
   return M->elements[index] = value;
 }
@@ -71,15 +71,15 @@ Matrix *matrix_copy(Matrix *M) {
 
 Matrix *matrix_transpose(Matrix *M) {
   // "If A has order m×n, then Aᵀ has order n×m"
-  Matrix *M_t = matrix_create(M->columns, M->rows);
+  Matrix *M_T = matrix_create(M->columns, M->rows);
 
   for (unsigned int row = 0; row < M->rows; ++row) {
     for (unsigned int column = 0; column < M->columns; ++column) {
-      matrix_set(M_t, column, row, matrix_get(M, row, column));
+      matrix_set(M_T, column, row, matrix_get(M, row, column));
     }
   }
 
-  return M_t;
+  return M_T;
 }
 
 bool matrix_same_order(Matrix *A, Matrix *B) {
@@ -104,7 +104,9 @@ bool matrix_equal(Matrix *A, Matrix *B) {
 
 Matrix *matrix_add(Matrix *A, Matrix *B) {
   // "The sum A+B of two matrices A and B having the same order..."
-  assert(matrix_same_order(A, B));
+  if (!matrix_same_order(A, B)) {
+    return NULL;
+  }
 
   // "... is the matrix obtained by adding corresponding elements of A and B"
   Matrix *C = matrix_create(A->rows, A->columns);
@@ -134,7 +136,9 @@ Matrix *matrix_scalar_multiply(Matrix *M, double scalar) {
 Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
   // "Let A and B have orders r×p and p×c, respectively, so that the number of
   // columns of A equals the number of rows of B..."
-  assert(A->columns == B->rows);
+  if (A->columns != B->rows) {
+    return NULL;
+  }
 
   double common_dimension = A->columns;
 

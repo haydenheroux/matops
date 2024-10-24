@@ -59,6 +59,8 @@ bool matrix_equal(Matrix *A, Matrix *B);
 
 /*
  * Calculates the result of adding two constant matrices.
+ *
+ * If the matrices have different order, returns NULL.
  */
 Matrix *matrix_add(Matrix *A, Matrix *B);
 
@@ -69,5 +71,7 @@ Matrix *matrix_scalar_multiply(Matrix *M, double scalar);
 
 /*
  * Calculates the result of multiplying `A``B`.
+ *
+ * If the matrices have different order, returns NULL.
  */
 Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B);
