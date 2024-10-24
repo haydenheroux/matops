@@ -160,6 +160,14 @@ Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
 }
 
 bool matrix_is_row_echelon(Matrix *M) {
+  // "R1: All nonzero rows precede (appear above) zero rows when both types
+  // are contained in the matrix"
+  // "R2: The first (leftmost) nonzero element of each nonzero row is unity (1)"
+  // "R3: When the first nonzero element of a row appears in column c, then all
+  // elements in column c in succeeding rows are zero"
+  // "R4: The first nonzero element of any nonzero row appears in a later column
+  // (further to the right) than the first nonzero element of any preceding row"
+
   bool leading_column_defined = false;
   // NOTE Comparison between signed and unsigned has weird behavior?
   // NOTE Setting the initial value to -1 breaks things...
