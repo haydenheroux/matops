@@ -6,6 +6,7 @@
 
 #define DEBUG false
 #define EPSILON 1E-14
+#define INDEX(M, r, c) r * M->columns + c
 #define IS_ZERO(x) fabs(x) <= EPSILON
 #define IS_NONZERO(x) fabs(x) > EPSILON
 
@@ -32,21 +33,17 @@ double matrix_get(Matrix *M, unsigned int row, unsigned int column) {
     printf("matrix_get(%d, %d) of %d×%d\n", row, column, M->rows, M->columns);
   }
 
-  unsigned int index = row * M->columns + column;
-
-  return M->elements[index];
+  return M->elements[INDEX(M, row, column)];
 }
 
-double matrix_set(Matrix *M, unsigned int row, unsigned int column,
-                  double value) {
+void matrix_set(Matrix *M, unsigned int row, unsigned int column,
+                double value) {
   if (DEBUG) {
     printf("matrix_set(%d, %d, %f) of %d×%d\n", row, column, value, M->rows,
            M->columns);
   }
 
-  unsigned int index = row * M->columns + column;
-
-  return M->elements[index] = value;
+  M->elements[INDEX(M, row, column)] = value;
 }
 
 void matrix_print(Matrix *M) {
@@ -62,9 +59,7 @@ void matrix_print(Matrix *M) {
 
   for (unsigned int row = 0; row < M->rows; ++row) {
     for (unsigned int column = 0; column < M->columns; ++column) {
-      double d = matrix_get(M, row, column);
-
-      printf("%*f ", max_width, d);
+      printf("%*f ", max_width, matrix_get(M, row, column));
     }
     printf("\n");
   }
@@ -116,35 +111,33 @@ bool matrix_are_equal(Matrix *A, Matrix *B) {
   return true;
 }
 
-Matrix *matrix_add(Matrix *A, Matrix *B) {
+Matrix *matrix_add(Matrix *M, Matrix *B) {
   // "The sum A+B of two matrices A and B having the same order..."
-  if (!matrix_are_same_order(A, B)) {
+  if (!matrix_are_same_order(M, B)) {
     return NULL;
   }
 
   // "... is the matrix obtained by adding corresponding elements of A and B"
-  Matrix *C = matrix_create(A->rows, A->columns);
-
-  for (unsigned int row = 0; row < A->rows; ++row) {
-    for (unsigned int column = 0; column < A->columns; ++column) {
-      double sum = matrix_get(A, row, column) + matrix_get(B, row, column);
-      matrix_set(C, row, column, sum);
+  for (unsigned int row = 0; row < M->rows; ++row) {
+    for (unsigned int column = 0; column < M->columns; ++column) {
+      double sum = matrix_get(M, row, column) + matrix_get(B, row, column);
+      matrix_set(M, row, column, sum);
     }
   }
 
-  return C;
+  return M;
 }
 
 Matrix *matrix_scalar_multiply(Matrix *M, double scalar) {
-  Matrix *C = matrix_create(M->rows, M->columns);
-
+  // "The matrix kA is obtained by multiplying ever element of A by the scalar
+  // k"
   for (unsigned int row = 0; row < M->rows; ++row) {
     for (unsigned int column = 0; column < M->columns; ++column) {
-      matrix_set(C, row, column, scalar * matrix_get(M, row, column));
+      matrix_set(M, row, column, scalar * matrix_get(M, row, column));
     }
   }
 
-  return C;
+  return M;
 }
 
 Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
@@ -216,12 +209,10 @@ bool matrix_is_row_echelon(Matrix *M) {
 }
 
 Matrix *matrix_row_echelon(Matrix *M) {
-  Matrix *C = matrix_copy(M);
-
   // "Step 1.1: Let R denote the work row"
   unsigned int work_row = 0;
 
-  while (work_row < C->rows) {
+  while (work_row < M->rows) {
     unsigned int pivot_column = 0;
     bool found_pivot = false;
 
@@ -230,18 +221,18 @@ Matrix *matrix_row_echelon(Matrix *M) {
     // "Step 1.2: Otherwise, let C denote this column"
     // "Step 1.3: Beginning with row R and continuing through successive rows,
     // locate the first row having a nonzero element in column C"
-    for (; !found_pivot && pivot_column < C->columns; ++pivot_column) {
+    for (; !found_pivot && pivot_column < M->columns; ++pivot_column) {
       for (unsigned int pivot_row = work_row;
            !found_pivot && pivot_row < M->rows; ++pivot_row) {
-        if (IS_NONZERO(matrix_get(C, pivot_row, pivot_column))) {
+        if (IS_NONZERO(matrix_get(M, pivot_row, pivot_column))) {
           found_pivot = true;
           // "Step 1.3: If this element is not row R, interchange it with row R"
-          for (unsigned int column = 0; column < C->columns; ++column) {
-            double pivot_row_value = matrix_get(C, pivot_row, column);
-            double work_row_value = matrix_get(C, work_row, column);
+          for (unsigned int column = 0; column < M->columns; ++column) {
+            double pivot_row_value = matrix_get(M, pivot_row, column);
+            double work_row_value = matrix_get(M, work_row, column);
 
-            matrix_set(C, pivot_row, column, work_row_value);
-            matrix_set(C, work_row, column, pivot_row_value);
+            matrix_set(M, pivot_row, column, work_row_value);
+            matrix_set(M, work_row, column, pivot_row_value);
           }
         }
       }
@@ -250,7 +241,7 @@ Matrix *matrix_row_echelon(Matrix *M) {
     // "Step 1.2: If no such column exists, stop; the transformation is
     // complete"
     if (!found_pivot) {
-      return C;
+      return M;
     }
 
     // TODO The pivot column is incremented after exiting the loop, and
@@ -259,29 +250,29 @@ Matrix *matrix_row_echelon(Matrix *M) {
 
     // "Step 1.3: Row R will now have a nonzero element in column C... called
     // the pivot; let P denote its value"
-    double pivot_value = matrix_get(C, work_row, pivot_column);
+    double pivot_value = matrix_get(M, work_row, pivot_column);
 
     // "Step 1.4: If P is not 1, multiply the elements of row R by 1/P"
     if (pivot_value != 1) {
-      for (unsigned int column = 0; column < C->columns; ++column) {
-        matrix_set(C, work_row, column,
-                   matrix_get(C, work_row, column) / pivot_value);
+      for (unsigned int column = 0; column < M->columns; ++column) {
+        matrix_set(M, work_row, column,
+                   matrix_get(M, work_row, column) / pivot_value);
       }
     }
 
     // "Step 1.5: Search all rows following R for one having a nonzero
     // element... designate that row as row N, and the value of the nonzero
     // element in row N and column C as V"
-    for (unsigned int row = work_row + 1; row < C->rows; ++row) {
-      double v = matrix_get(C, row, pivot_column);
+    for (unsigned int row = work_row + 1; row < M->rows; ++row) {
+      double v = matrix_get(M, row, pivot_column);
       if (IS_NONZERO(v)) {
         // "Step 1.6: Add to the elements of row N the scalar -V times the
         // corresponding elements of row R"
-        for (unsigned int column = 0; column < C->columns; ++column) {
-          double x = matrix_get(C, row, column);
-          double y = matrix_get(C, work_row, column);
+        for (unsigned int column = 0; column < M->columns; ++column) {
+          double x = matrix_get(M, row, column);
+          double y = matrix_get(M, work_row, column);
           x -= v * y;
-          matrix_set(C, row, column, x);
+          matrix_set(M, row, column, x);
         }
       }
 
@@ -294,7 +285,7 @@ Matrix *matrix_row_echelon(Matrix *M) {
     work_row++;
   }
 
-  return C;
+  return M;
 }
 
 unsigned int matrix_row_rank(Matrix *M) {

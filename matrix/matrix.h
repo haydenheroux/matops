@@ -17,23 +17,23 @@ typedef struct {
 Matrix *matrix_create(unsigned int rows, unsigned int columns);
 
 /*
- * Deletes a matrix.
+ * Deletes the matrix `M`.
  */
 void matrix_delete(Matrix *M);
 
 /*
- * Gets the element at `row``column`
+ * Gets the element of the matrix `M` at row `row` and column `column`.
  */
 double matrix_get(Matrix *M, unsigned int row, unsigned int column);
 
 /*
- * Sets the element at `row``column` to `value`.
+ * Sets the element of the matrix `M` at row `row` and column `column` to
+ * `value`.
  */
-double matrix_set(Matrix *M, unsigned int row, unsigned int column,
-                  double value);
+void matrix_set(Matrix *M, unsigned int row, unsigned int column, double value);
 
 /*
- * Prints the matrix.
+ * Prints the matrix `M`.
  */
 void matrix_print(Matrix *M);
 
@@ -43,7 +43,7 @@ void matrix_print(Matrix *M);
 Matrix *matrix_copy(Matrix *M);
 
 /*
- * Calculates the transpose of a matrix.
+ * Creates a matrix containing the transpose of the matrix `M`.
  */
 Matrix *matrix_transpose(Matrix *M);
 
@@ -58,21 +58,27 @@ bool matrix_are_same_order(Matrix *A, Matrix *B);
 bool matrix_are_equal(Matrix *A, Matrix *B);
 
 /*
- * Calculates the result of adding two constant matrices.
+ * Adds the corresponding elements of the matrix `B` to the matrix `M` if the
+ * matrices have the same order.
  *
  * If the matrices have different order, returns NULL.
+ * Otherwise, returns `M`, with the corresponding elements of `B` added.
  */
-Matrix *matrix_add(Matrix *A, Matrix *B);
+Matrix *matrix_add(Matrix *M, Matrix *B);
 
 /*
- * Calculates the result of multiplying the matrix `M` by `scalar`.
+ * Multiplies elements of the matrix `M` by the scalar `scalar`.
+ *
+ * Returns `M`, with elements multiplied by the scalar `scalar`.
  */
 Matrix *matrix_scalar_multiply(Matrix *M, double scalar);
 
 /*
- * Calculates the result of multiplying `A``B`.
+ * Creates a matrix containing the result of multiplying the matrices `A` and
+ * `B`.
  *
  * If the matrices have different order, returns NULL.
+ * Otherwise, returns a created matrix `C`, which contains the result of `A``B`.
  */
 Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B);
 
@@ -82,7 +88,9 @@ Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B);
 bool matrix_is_row_echelon(Matrix *M);
 
 /*
- * Converts a matrix to row-echelon form.
+ * Transforms the matrix `M` to row-echelon form.
+ *
+ * Returns the matrix `M` after transformation.
  */
 Matrix *matrix_row_echelon(Matrix *M);
 
