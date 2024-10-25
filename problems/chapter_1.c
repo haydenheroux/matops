@@ -382,6 +382,252 @@ void problem_1_11() {
        !matrix_is_row_echelon(E));
 }
 
+/*
+ * Problem 1.12
+ *
+ * Use elementary row operations to transform matrices B, C, and E of
+ * Problem 1.11 into row-echelon form.
+ *
+ * B = [ 1 2 3
+ *       0 1 4 ]
+ *
+ * C = [ 0 1 2
+ *       0 0 1 ]
+ *
+ * E = [ 1 2  3
+ *       0 1 -5 ]
+ */
+void problem_1_12() {
+  Matrix *B = matrix_create(2, 3);
+  matrix_set(B, 0, 1, 1);
+  matrix_set(B, 0, 2, 4);
+  matrix_set(B, 1, 0, 1);
+  matrix_set(B, 1, 1, 2);
+  matrix_set(B, 1, 2, 3);
+
+  Matrix *C = matrix_create(2, 3);
+  matrix_set(C, 0, 1, 2);
+  matrix_set(C, 0, 2, 4);
+  matrix_set(C, 1, 2, 1);
+
+  Matrix *E = matrix_create(2, 3);
+  matrix_set(E, 0, 0, 1);
+  matrix_set(E, 0, 1, 2);
+  matrix_set(E, 0, 2, 3);
+  matrix_set(E, 1, 0, 4);
+  matrix_set(E, 1, 1, 9);
+  matrix_set(E, 1, 2, 7);
+
+  Matrix *B_ = matrix_row_echelon(B);
+  Matrix *C_ = matrix_row_echelon(C);
+  Matrix *E_ = matrix_row_echelon(E);
+
+  Matrix *R_B = matrix_create(2, 3);
+  matrix_set(R_B, 0, 0, 1);
+  matrix_set(R_B, 0, 1, 2);
+  matrix_set(R_B, 0, 2, 3);
+  matrix_set(R_B, 1, 1, 1);
+  matrix_set(R_B, 1, 2, 4);
+
+  Matrix *R_C = matrix_create(2, 3);
+  matrix_set(R_C, 0, 1, 1);
+  matrix_set(R_C, 0, 2, 2);
+  matrix_set(R_C, 1, 2, 1);
+
+  Matrix *R_E = matrix_create(2, 3);
+  matrix_set(R_E, 0, 0, 1);
+  matrix_set(R_E, 0, 1, 2);
+  matrix_set(R_E, 0, 2, 3);
+  matrix_set(R_E, 1, 1, 1);
+  matrix_set(R_E, 1, 2, -5);
+
+  test("B = R_B", "B ≠ R_B", matrix_are_equal(B_, R_B));
+  test("C = R_C", "C ≠ R_C", matrix_are_equal(C_, R_C));
+  test("E = R_E", "E ≠ R_E", matrix_are_equal(E_, R_E));
+}
+
+/*
+ * Problem 1.13
+ *
+ * Transform the following matrix into row-echelon form:
+ *
+ * A = [ 1  2 -1  6
+ *       3  8  9 10
+ *       2 -1  2 -2 ]
+ *
+ * R = [ 1 2 -1  6
+ *       0 1  6 -4
+ *       0 0  1 -1 ]
+ */
+void problem_1_13() {
+  Matrix *A = matrix_create(3, 4);
+  matrix_set(A, 0, 0, 1);
+  matrix_set(A, 0, 1, 2);
+  matrix_set(A, 0, 2, -1);
+  matrix_set(A, 0, 3, 6);
+  matrix_set(A, 1, 0, 3);
+  matrix_set(A, 1, 1, 8);
+  matrix_set(A, 1, 2, 9);
+  matrix_set(A, 1, 3, 10);
+  matrix_set(A, 2, 0, 2);
+  matrix_set(A, 2, 1, -1);
+  matrix_set(A, 2, 2, 2);
+  matrix_set(A, 2, 3, -2);
+
+  Matrix *R = matrix_create(3, 4);
+  matrix_set(R, 0, 0, 1);
+  matrix_set(R, 0, 1, 2);
+  matrix_set(R, 0, 2, -1);
+  matrix_set(R, 0, 3, 6);
+  matrix_set(R, 1, 1, 1);
+  matrix_set(R, 1, 2, 6);
+  matrix_set(R, 1, 3, -4);
+  matrix_set(R, 2, 2, 1);
+  matrix_set(R, 2, 3, -1);
+
+  Matrix *A_ = matrix_row_echelon(A);
+
+  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+}
+
+/*
+ * Problem 1.14
+ *
+ * Transform the following matrix into row-echelon form:
+ *
+ * A = [ 2 1 0 5
+ *       3 6 1 1
+ *       5 7 1 8 ]
+ *
+ * R = [ 1 1/2   0   5/2
+ *       0   1 2/9 -13/9
+ *       0   0   0     1 ]
+ */
+void problem_1_14() {
+  Matrix *A = matrix_create(3, 4);
+  matrix_set(A, 0, 0, 2);
+  matrix_set(A, 0, 1, 1);
+  matrix_set(A, 0, 3, 5);
+  matrix_set(A, 1, 0, 3);
+  matrix_set(A, 1, 1, 6);
+  matrix_set(A, 1, 2, 1);
+  matrix_set(A, 1, 3, 1);
+  matrix_set(A, 2, 0, 5);
+  matrix_set(A, 2, 1, 7);
+  matrix_set(A, 2, 2, 1);
+  matrix_set(A, 2, 3, 8);
+
+  Matrix *R = matrix_create(3, 4);
+  matrix_set(R, 0, 0, 1);
+  matrix_set(R, 0, 1, 1.0 / 2.0);
+  matrix_set(R, 0, 3, 5.0 / 2.0);
+  matrix_set(R, 1, 1, 1);
+  matrix_set(R, 1, 2, 2.0 / 9.0);
+  matrix_set(R, 1, 3, -13.0 / 9.0);
+  matrix_set(R, 2, 3, 1);
+
+  Matrix *A_ = matrix_row_echelon(A);
+
+  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+}
+
+/*
+ * Problem 1.15
+ *
+ * Transform the following matrix into row-echelon form:
+ *
+ * A = [ 3  2 1 -4  1
+ *       2  3 0 -1 -1
+ *       1 -6 3 -8  7 ]
+ *
+ * R = [ 1 2/3  1/3 -4/3 1/3
+ *       0   1 -2/5    1  -1
+ *       0   0    0    0   0 ]
+ */
+void problem_1_15() {
+  Matrix *A = matrix_create(3, 5);
+  matrix_set(A, 0, 0, 3);
+  matrix_set(A, 0, 1, 2);
+  matrix_set(A, 0, 2, 1);
+  matrix_set(A, 0, 3, -4);
+  matrix_set(A, 0, 4, 1);
+  matrix_set(A, 1, 0, 2);
+  matrix_set(A, 1, 1, 3);
+  matrix_set(A, 1, 3, -1);
+  matrix_set(A, 1, 4, -1);
+  matrix_set(A, 2, 0, 1);
+  matrix_set(A, 2, 1, -6);
+  matrix_set(A, 2, 2, 3);
+  matrix_set(A, 2, 3, -8);
+  matrix_set(A, 2, 4, 7);
+
+  Matrix *R = matrix_create(3, 5);
+  matrix_set(R, 0, 0, 1);
+  matrix_set(R, 0, 1, 2.0 / 3.0);
+  matrix_set(R, 0, 2, 1.0 / 3.0);
+  matrix_set(R, 0, 3, -4.0 / 3.0);
+  matrix_set(R, 0, 4, 1.0 / 3.0);
+  matrix_set(R, 1, 1, 1);
+  matrix_set(R, 1, 2, -2.0 / 5.0);
+  matrix_set(R, 1, 3, 1);
+  matrix_set(R, 1, 4, -1);
+
+  Matrix *A_ = matrix_row_echelon(A);
+
+  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+}
+
+/*
+ * Problem 1.16
+ *
+ * Determine the rank of the matrix of Problem 1.14.
+ *
+ * rank(A) = 3
+ */
+void problem_1_16() {
+  Matrix *A = matrix_create(3, 4);
+  matrix_set(A, 0, 0, 2);
+  matrix_set(A, 0, 1, 1);
+  matrix_set(A, 0, 3, 5);
+  matrix_set(A, 1, 0, 3);
+  matrix_set(A, 1, 1, 6);
+  matrix_set(A, 1, 2, 1);
+  matrix_set(A, 1, 3, 1);
+  matrix_set(A, 2, 0, 5);
+  matrix_set(A, 2, 1, 7);
+  matrix_set(A, 2, 2, 1);
+  matrix_set(A, 2, 3, 8);
+
+  test("rank(A) = 3", "rank(A) ≠ 3", matrix_row_rank(A) == 3);
+}
+
+/*
+ * Problem 1.17
+ *
+ * Determine the rank of the matrix of Problem 1.15.
+ *
+ * rank(A) = 2
+ */
+void problem_1_17() {
+  Matrix *A = matrix_create(3, 5);
+  matrix_set(A, 0, 0, 3);
+  matrix_set(A, 0, 1, 2);
+  matrix_set(A, 0, 2, 1);
+  matrix_set(A, 0, 3, -4);
+  matrix_set(A, 0, 4, 1);
+  matrix_set(A, 1, 0, 2);
+  matrix_set(A, 1, 1, 3);
+  matrix_set(A, 1, 3, -1);
+  matrix_set(A, 1, 4, -1);
+  matrix_set(A, 2, 0, 1);
+  matrix_set(A, 2, 1, -6);
+  matrix_set(A, 2, 2, 3);
+  matrix_set(A, 2, 3, -8);
+  matrix_set(A, 2, 4, 7);
+
+  test("rank(A) = 2", "rank(A) ≠ 2", matrix_row_rank(A) == 2);
+}
+
 int main() {
   problem_1_1();
   problem_1_2();
@@ -391,4 +637,10 @@ int main() {
   problem_1_6();
   problem_1_7();
   problem_1_11();
+  problem_1_12();
+  problem_1_13();
+  problem_1_14();
+  problem_1_15();
+  problem_1_16();
+  problem_1_17();
 }

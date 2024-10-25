@@ -6,9 +6,9 @@
  * A constant matrix with `rows` rows and `columns` columns.
  */
 typedef struct {
-  double *elements;
   unsigned int rows;
   unsigned int columns;
+  double *elements;
 } Matrix;
 
 /*
