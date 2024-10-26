@@ -28,7 +28,7 @@ void matrix_delete(Matrix *M) {
   free(M);
 }
 
-double matrix_get(Matrix *M, unsigned int row, unsigned int column) {
+double matrix_get(const Matrix *M, unsigned int row, unsigned int column) {
   if (DEBUG) {
     printf("matrix_get(%d, %d) of %d×%d\n", row, column, M->rows, M->columns);
   }
@@ -46,7 +46,7 @@ void matrix_set(Matrix *M, unsigned int row, unsigned int column,
   M->elements[INDEX(M, row, column)] = value;
 }
 
-void matrix_print(Matrix *M) {
+void matrix_print(const Matrix *M) {
   int max_width = 0;
 
   for (unsigned int row = 0; row < M->rows; ++row) {
@@ -65,7 +65,7 @@ void matrix_print(Matrix *M) {
   }
 }
 
-Matrix *matrix_copy(Matrix *M) {
+Matrix *matrix_copy(const Matrix *M) {
   Matrix *C = matrix_create(M->rows, M->columns);
 
   for (unsigned int row = 0; row < M->rows; ++row) {
@@ -77,7 +77,7 @@ Matrix *matrix_copy(Matrix *M) {
   return C;
 }
 
-Matrix *matrix_transpose(Matrix *M) {
+Matrix *matrix_transpose(const Matrix *M) {
   // "If A has order m×n, then Aᵀ has order n×m"
   Matrix *M_T = matrix_create(M->columns, M->rows);
 
@@ -90,11 +90,11 @@ Matrix *matrix_transpose(Matrix *M) {
   return M_T;
 }
 
-bool matrix_are_same_order(Matrix *A, Matrix *B) {
+bool matrix_are_same_order(const Matrix *A, const Matrix *B) {
   return A->rows == B->rows && A->columns == B->columns;
 }
 
-bool matrix_are_equal(Matrix *A, Matrix *B) {
+bool matrix_are_equal(const Matrix *A, const Matrix *B) {
   if (!matrix_are_same_order(A, B))
     return false;
 
@@ -111,24 +111,20 @@ bool matrix_are_equal(Matrix *A, Matrix *B) {
   return true;
 }
 
-Matrix *matrix_add(Matrix *M, Matrix *B) {
+void matrix_add(Matrix *A, const Matrix *B) {
   // "The sum A+B of two matrices A and B having the same order..."
-  if (!matrix_are_same_order(M, B)) {
-    return NULL;
-  }
+  assert(matrix_are_same_order(A, B));
 
   // "... is the matrix obtained by adding corresponding elements of A and B"
-  for (unsigned int row = 0; row < M->rows; ++row) {
-    for (unsigned int column = 0; column < M->columns; ++column) {
-      double sum = matrix_get(M, row, column) + matrix_get(B, row, column);
-      matrix_set(M, row, column, sum);
+  for (unsigned int row = 0; row < A->rows; ++row) {
+    for (unsigned int column = 0; column < A->columns; ++column) {
+      double sum = matrix_get(A, row, column) + matrix_get(B, row, column);
+      matrix_set(A, row, column, sum);
     }
   }
-
-  return M;
 }
 
-Matrix *matrix_scalar_multiply(Matrix *M, double scalar) {
+void matrix_scalar_multiply(Matrix *M, double scalar) {
   // "The matrix kA is obtained by multiplying ever element of A by the scalar
   // k"
   for (unsigned int row = 0; row < M->rows; ++row) {
@@ -136,11 +132,9 @@ Matrix *matrix_scalar_multiply(Matrix *M, double scalar) {
       matrix_set(M, row, column, scalar * matrix_get(M, row, column));
     }
   }
-
-  return M;
 }
 
-Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
+Matrix *matrix_matrix_multiply(const Matrix *A, const Matrix *B) {
   // "Let A and B have orders r×p and p×c, respectively, so that the number of
   // columns of A equals the number of rows of B..."
   if (A->columns != B->rows) {
@@ -168,7 +162,7 @@ Matrix *matrix_matrix_multiply(Matrix *A, Matrix *B) {
   return C;
 }
 
-bool matrix_is_row_echelon(Matrix *M) {
+bool matrix_is_row_echelon(const Matrix *M) {
   // "R1: All nonzero rows precede (appear above) zero rows when both types
   // are contained in the matrix"
   // "R2: The first (leftmost) nonzero element of each nonzero row is unity (1)"
@@ -208,7 +202,7 @@ bool matrix_is_row_echelon(Matrix *M) {
   return true;
 }
 
-Matrix *matrix_row_echelon(Matrix *M) {
+void matrix_row_echelon(Matrix *M) {
   // "Step 1.1: Let R denote the work row"
   unsigned int work_row = 0;
 
@@ -241,7 +235,7 @@ Matrix *matrix_row_echelon(Matrix *M) {
     // "Step 1.2: If no such column exists, stop; the transformation is
     // complete"
     if (!found_pivot) {
-      return M;
+      return;
     }
 
     // TODO The pivot column is incremented after exiting the loop, and
@@ -284,12 +278,11 @@ Matrix *matrix_row_echelon(Matrix *M) {
     // Otherwise, return to Step 1.2."
     work_row++;
   }
-
-  return M;
 }
 
-unsigned int matrix_row_rank(Matrix *M) {
-  Matrix *R = matrix_row_echelon(M);
+unsigned int matrix_row_rank(const Matrix *M) {
+  Matrix *R = matrix_copy(M);
+  matrix_row_echelon(R);
 
   // "The rank (or row rank) of a matrix is the number of nonzero rows in the
   // matrix after it has been transformed to row-echelon form"

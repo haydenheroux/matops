@@ -63,10 +63,13 @@ void problem_1_2() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_B = matrix_add(matrix_copy(A), B);
-  Matrix *B_A = matrix_add(matrix_copy(B), A);
+  Matrix *A_ = matrix_copy(A);
+  matrix_add(A_, B);
 
-  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_B, B_A));
+  Matrix *B_ = matrix_copy(B);
+  matrix_add(B_, A);
+
+  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_, B_));
 }
 
 /*
@@ -89,11 +92,13 @@ void problem_1_3() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_ = matrix_scalar_multiply(matrix_copy(A), 3);
+  Matrix *A_ = matrix_copy(A);
+  matrix_scalar_multiply(A_, 3);
 
-  Matrix *B_ = matrix_scalar_multiply(matrix_copy(B), -0.5);
+  Matrix *B_ = matrix_copy(B);
+  matrix_scalar_multiply(B_, -0.5);
 
-  Matrix *A_B_ = matrix_add(matrix_copy(A_), B_);
+  matrix_add(A_, B_);
 
   Matrix *R = matrix_create(2, 2);
   matrix_set(R, 0, 0, -2);
@@ -101,7 +106,7 @@ void problem_1_3() {
   matrix_set(R, 1, 0, 3);
   matrix_set(R, 1, 1, 12.5);
 
-  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_B_, R));
+  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_, R));
 }
 
 /*
@@ -418,9 +423,9 @@ void problem_1_12() {
   matrix_set(E, 1, 1, 9);
   matrix_set(E, 1, 2, 7);
 
-  Matrix *B_ = matrix_row_echelon(B);
-  Matrix *C_ = matrix_row_echelon(C);
-  Matrix *E_ = matrix_row_echelon(E);
+  matrix_row_echelon(B);
+  matrix_row_echelon(C);
+  matrix_row_echelon(E);
 
   Matrix *R_B = matrix_create(2, 3);
   matrix_set(R_B, 0, 0, 1);
@@ -441,9 +446,9 @@ void problem_1_12() {
   matrix_set(R_E, 1, 1, 1);
   matrix_set(R_E, 1, 2, -5);
 
-  test("B = R_B", "B ≠ R_B", matrix_are_equal(B_, R_B));
-  test("C = R_C", "C ≠ R_C", matrix_are_equal(C_, R_C));
-  test("E = R_E", "E ≠ R_E", matrix_are_equal(E_, R_E));
+  test("B = R_B", "B ≠ R_B", matrix_are_equal(B, R_B));
+  test("C = R_C", "C ≠ R_C", matrix_are_equal(C, R_C));
+  test("E = R_E", "E ≠ R_E", matrix_are_equal(E, R_E));
 }
 
 /*
@@ -474,6 +479,8 @@ void problem_1_13() {
   matrix_set(A, 2, 2, 2);
   matrix_set(A, 2, 3, -2);
 
+  matrix_row_echelon(A);
+
   Matrix *R = matrix_create(3, 4);
   matrix_set(R, 0, 0, 1);
   matrix_set(R, 0, 1, 2);
@@ -485,9 +492,7 @@ void problem_1_13() {
   matrix_set(R, 2, 2, 1);
   matrix_set(R, 2, 3, -1);
 
-  Matrix *A_ = matrix_row_echelon(A);
-
-  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+  test("A = R", "A ≠ R", matrix_are_equal(A, R));
 }
 
 /*
@@ -517,6 +522,8 @@ void problem_1_14() {
   matrix_set(A, 2, 2, 1);
   matrix_set(A, 2, 3, 8);
 
+  matrix_row_echelon(A);
+
   Matrix *R = matrix_create(3, 4);
   matrix_set(R, 0, 0, 1);
   matrix_set(R, 0, 1, 1.0 / 2.0);
@@ -526,9 +533,7 @@ void problem_1_14() {
   matrix_set(R, 1, 3, -13.0 / 9.0);
   matrix_set(R, 2, 3, 1);
 
-  Matrix *A_ = matrix_row_echelon(A);
-
-  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+  test("A = R", "A ≠ R", matrix_are_equal(A, R));
 }
 
 /*
@@ -561,6 +566,8 @@ void problem_1_15() {
   matrix_set(A, 2, 3, -8);
   matrix_set(A, 2, 4, 7);
 
+  matrix_row_echelon(A);
+
   Matrix *R = matrix_create(3, 5);
   matrix_set(R, 0, 0, 1);
   matrix_set(R, 0, 1, 2.0 / 3.0);
@@ -572,9 +579,7 @@ void problem_1_15() {
   matrix_set(R, 1, 3, 1);
   matrix_set(R, 1, 4, -1);
 
-  Matrix *A_ = matrix_row_echelon(A);
-
-  test("A = R", "A ≠ R", matrix_are_equal(A_, R));
+  test("A = R", "A ≠ R", matrix_are_equal(A, R));
 }
 
 /*
