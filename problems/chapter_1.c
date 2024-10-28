@@ -1,3 +1,4 @@
+#include "partition.h"
 #include <matrix.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -309,6 +310,103 @@ void problem_1_7() {
   // "Note that, for these matrices, AB = AC and yet B ≠ C."
   test("AB = AC", "AB ≠ AC", matrix_are_equal(AB, AC));
   test("B ≠ C", "B = C", !matrix_are_equal(B, C));
+}
+
+/*
+ * Problem 1.8
+ *
+ * A = [ 1 2  3  4
+ *       0 0  5  6
+ *       7 8 -1 -2 ]
+ *
+ * A = [ B C
+ *       E F ]
+ *
+ * B = [ 1 2 ]
+ *
+ * C = [ 3 4 ]
+ *
+ * E = [ 0 0
+ *       7 8 ]
+ *
+ * F = [  5  6
+ *       -1 -2 ]
+ *
+ * A = [ G H ]
+ *
+ * G = [ 1 2  3
+ *       0 0  5
+ *       7 8 -1 ]
+ *
+ * H = [  4
+ *        6
+ *       -2 ]
+ */
+void problem_1_8() {
+  Matrix *A = matrix_create(3, 4);
+  matrix_set(A, 0, 0, 1);
+  matrix_set(A, 0, 1, 2);
+  matrix_set(A, 0, 2, 3);
+  matrix_set(A, 0, 3, 4);
+  matrix_set(A, 1, 2, 5);
+  matrix_set(A, 1, 3, 6);
+  matrix_set(A, 2, 0, 7);
+  matrix_set(A, 2, 1, 8);
+  matrix_set(A, 2, 2, -1);
+  matrix_set(A, 2, 3, -2);
+
+  Matrix *B = matrix_create(1, 2);
+  matrix_set(B, 0, 0, 1);
+  matrix_set(B, 0, 1, 2);
+
+  Matrix *C = matrix_create(1, 2);
+  matrix_set(C, 0, 0, 3);
+  matrix_set(C, 0, 1, 4);
+
+  Matrix *E = matrix_create(2, 2);
+  matrix_set(E, 1, 0, 7);
+  matrix_set(E, 1, 1, 8);
+
+  Matrix *F = matrix_create(2, 2);
+  matrix_set(F, 0, 0, 5);
+  matrix_set(F, 0, 1, 6);
+  matrix_set(F, 1, 0, -1);
+  matrix_set(F, 1, 1, -2);
+
+  PartitionedMatrix *A_BCEF = partitioned_matrix_create(3, 4, 2, 2);
+  partitioned_matrix_set_partition(A_BCEF, 0, 0, 1, 2);
+  partitioned_matrix_set_partition(A_BCEF, 0, 1, 1, 2);
+  partitioned_matrix_set_partition(A_BCEF, 1, 0, 2, 2);
+  partitioned_matrix_set_partition(A_BCEF, 1, 1, 2, 2);
+
+  partitioned_matrix_set_matrix(A_BCEF, 0, 0, B);
+  partitioned_matrix_set_matrix(A_BCEF, 0, 1, C);
+  partitioned_matrix_set_matrix(A_BCEF, 1, 0, E);
+  partitioned_matrix_set_matrix(A_BCEF, 1, 1, F);
+
+  Matrix *G = matrix_create(3, 3);
+  matrix_set(G, 0, 0, 1);
+  matrix_set(G, 0, 1, 2);
+  matrix_set(G, 0, 2, 3);
+  matrix_set(G, 1, 2, 5);
+  matrix_set(G, 2, 0, 7);
+  matrix_set(G, 2, 1, 8);
+  matrix_set(G, 2, 2, -1);
+
+  Matrix *H = matrix_create(3, 1);
+  matrix_set(H, 0, 0, 4);
+  matrix_set(H, 0, 1, 6);
+  matrix_set(H, 0, 2, -2);
+
+  PartitionedMatrix *A_GH = partitioned_matrix_create(3, 4, 2, 1);
+  partitioned_matrix_set_partition(A_GH, 0, 0, 3, 3);
+  partitioned_matrix_set_partition(A_GH, 0, 1, 3, 1);
+
+  partitioned_matrix_set_matrix(A_GH, 0, 0, G);
+  partitioned_matrix_set_matrix(A_GH, 0, 1, H);
+
+  test("A = A_BCEF", "A ≠ A_BCEF", matrix_are_equal(A, A_BCEF->M));
+  test("A = A_GH", "A ≠ A_GH", matrix_are_equal(A, A_GH->M));
 }
 
 /*
@@ -641,6 +739,7 @@ int main() {
   problem_1_5();
   problem_1_6();
   problem_1_7();
+  problem_1_8();
   problem_1_11();
   problem_1_12();
   problem_1_13();

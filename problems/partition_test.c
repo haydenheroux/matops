@@ -45,7 +45,7 @@ void test_1_2() {
   matrix_set(PM->M, 1, 1, 4);
 
   partitioned_matrix_set_partition(PM, 0, 0, 1, 2);
-  partitioned_matrix_set_partition(PM, 0, 1, 1, 2);
+  partitioned_matrix_set_partition(PM, 1, 0, 1, 2);
 
   puts("1×2 partitions");
   matrix_print(partitioned_matrix_get_matrix(PM, 0, 0));
@@ -68,12 +68,12 @@ void test_2_1() {
   matrix_set(PM->M, 1, 1, 4);
 
   partitioned_matrix_set_partition(PM, 0, 0, 2, 1);
-  partitioned_matrix_set_partition(PM, 1, 0, 2, 1);
+  partitioned_matrix_set_partition(PM, 0, 1, 2, 1);
 
   puts("2×1 partitions");
   matrix_print(partitioned_matrix_get_matrix(PM, 0, 0));
   puts("");
-  matrix_print(partitioned_matrix_get_matrix(PM, 1, 0));
+  matrix_print(partitioned_matrix_get_matrix(PM, 0, 1));
 }
 
 int main() {
