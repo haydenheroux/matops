@@ -21,16 +21,20 @@ PROBLEMS = $(patsubst $(PROB_DIR)/%.c,$(BIN_DIR)/%,$(PROB_SRC))
 
 all: $(PROBLEMS)
 
-$(BIN_DIR)/%: $(MAT_OBJ) $(TEST_OBJ) $(PROB_OBJ)
-	$(CC) $(CFLAGS) -o $@ $(MAT_OBJ) $(TEST_OBJ) $(PROB_OBJ)
+# Compile all problem binaries
+$(BIN_DIR)/%: $(MAT_OBJ) $(TEST_OBJ) $(OBJ_DIR)/%.o
+	$(CC) $(CFLAGS) -o $@ $^
 
+# Compile matrix library objects
 $(OBJ_DIR)/%.o: $(MAT_DIR)/%.c $(MAT_DIR)/%.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# Compile test library objects
 $(OBJ_DIR)/%.o: $(TEST_DIR)/%.c $(TEST_DIR)/%.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR)/%.o: $(PROB_DIR)/%.c $(MAT_DIR)/vector.h $(TEST_DIR)/test.h
+# Compile problem objects
+$(OBJ_DIR)/%.o: $(PROB_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
