@@ -4,18 +4,18 @@
 #include <stdlib.h>
 
 #define DEBUG false
-#define INDEX(PM, h, v) h * PM->vertical + v
+#define INDEX(PM, h, v) h * PM->vertical_partitions + v
 
 PartitionedMatrix *partitioned_matrix_create(unsigned int rows,
                                              unsigned int columns,
-                                             unsigned int horizontal,
-                                             unsigned int vertical) {
+                                             unsigned int horizontal_partitions,
+                                             unsigned int vertical_partitions) {
   PartitionedMatrix *PM = malloc(sizeof(PartitionedMatrix));
 
-  PM->horizontal = horizontal;
-  PM->vertical = vertical;
+  PM->horizontal_partitions = horizontal_partitions;
+  PM->vertical_partitions = vertical_partitions;
 
-  unsigned int size = horizontal * vertical;
+  unsigned int size = horizontal_partitions * vertical_partitions;
   PM->partitions = calloc(size, sizeof(Partition));
 
   PM->M = matrix_create(rows, columns);
@@ -30,129 +30,139 @@ void partitioned_matrix_delete(PartitionedMatrix *PM) {
 }
 
 Partition *partitioned_matrix_get_partition(const PartitionedMatrix *PM,
-                                            unsigned int horizontal,
-                                            unsigned int vertical) {
+                                            unsigned int horizontal_partition,
+                                            unsigned int vertical_partition) {
   if (DEBUG) {
-    printf("partitioned_matrix_get_partition(%d, %d) of %d×%d\n", horizontal,
-           vertical, PM->horizontal, PM->vertical);
+    printf("partitioned_matrix_get_partition(%d, %d) of %d×%d\n",
+           horizontal_partition, vertical_partition, PM->horizontal_partitions,
+           PM->vertical_partitions);
   }
 
-  return &PM->partitions[INDEX(PM, horizontal, vertical)];
+  return &PM->partitions[INDEX(PM, horizontal_partition, vertical_partition)];
+}
+
+unsigned int partitioned_matrix_horizontal_partition_column_span(
+    const PartitionedMatrix *PM, unsigned int horizontal_partition) {
+  unsigned int column_span = 0;
+
+  for (unsigned int vertical_partition = 0;
+       vertical_partition < PM->vertical_partitions; ++vertical_partition) {
+    Partition *partition = partitioned_matrix_get_partition(
+        PM, horizontal_partition, vertical_partition);
+
+    if (partition->column_span != 0) {
+      assert(column_span == partition->column_span || column_span == 0);
+      column_span = partition->column_span;
+    }
+  }
+
+  return column_span;
+}
+
+unsigned int partitioned_matrix_vertical_partition_row_span(
+    const PartitionedMatrix *PM, unsigned int vertical_partition) {
+  unsigned int row_span = 0;
+
+  for (unsigned int horizontal_partition = 0;
+       horizontal_partition < PM->horizontal_partitions;
+       ++horizontal_partition) {
+    Partition *partition = partitioned_matrix_get_partition(
+        PM, horizontal_partition, vertical_partition);
+
+    if (partition->row_span != 0) {
+      assert(row_span == partition->row_span || row_span == 0);
+      row_span = partition->row_span;
+    }
+  }
+
+  return row_span;
 }
 
 void partitioned_matrix_set_partition(PartitionedMatrix *PM,
-                                      unsigned int horizontal,
-                                      unsigned int vertical, unsigned int rows,
-                                      unsigned int columns) {
+                                      unsigned int horizontal_partiion,
+                                      unsigned int vertical_partition,
+                                      unsigned int rows, unsigned int columns) {
   if (DEBUG) {
-    printf("partitioned_matrix_set_partition(%d, %d) of %d×%d\n\n", horizontal,
-           vertical, PM->horizontal, PM->vertical);
+    printf("partitioned_matrix_set_partition(%d, %d) of %d×%d\n\n",
+           horizontal_partiion, vertical_partition, PM->horizontal_partitions,
+           PM->vertical_partitions);
   }
 
-  if (DEBUG)
-    puts("testing same rows in set partition");
-  // TODO All partitions sharing vertical must have same number of rows
-  bool same_rows = true;
-  for (unsigned int horiz = 0; horiz < PM->horizontal; ++horiz) {
-    // Skip over self
-    if (horiz == horizontal) {
-      continue;
-    }
+  unsigned int vertical_row_span =
+      partitioned_matrix_vertical_partition_row_span(PM, vertical_partition);
+  unsigned int horizontal_columns_span =
+      partitioned_matrix_horizontal_partition_column_span(PM,
+                                                          horizontal_partiion);
 
-    Partition *partition =
-        partitioned_matrix_get_partition(PM, horiz, vertical);
+  assert(vertical_row_span == rows || vertical_row_span == 0);
+  assert(horizontal_columns_span == columns || horizontal_columns_span == 0);
 
-    if (partition->rows != 0 && partition->rows != rows) {
-      same_rows = false;
-      break;
-    }
+  Partition *partition = partitioned_matrix_get_partition(
+      PM, horizontal_partiion, vertical_partition);
+  partition->row_span = rows;
+  partition->column_span = columns;
+}
+
+unsigned int
+partitioned_matrix_offset_row_index(const PartitionedMatrix *PM,
+                                    unsigned int horizontal_partition,
+                                    unsigned int vertical_partition) {
+  unsigned int offset_row = 0;
+
+  for (unsigned int vert = 0; vert < vertical_partition; ++vert) {
+    offset_row +=
+        partitioned_matrix_get_partition(PM, horizontal_partition, vert)
+            ->row_span;
   }
-  assert(same_rows);
-  if (DEBUG)
-    puts("");
 
-  if (DEBUG)
-    puts("testing same columns in set partition");
-  // TODO All partitions sharing horizontal must have same number of columns
-  bool same_columns = true;
-  for (unsigned int vert = 0; vert < PM->vertical; ++vert) {
-    // Skip over self
-    if (vert == vertical) {
-      continue;
-    }
+  return offset_row;
+}
 
-    Partition *partition =
-        partitioned_matrix_get_partition(PM, horizontal, vert);
+unsigned int
+partitioned_matrix_offset_column_index(const PartitionedMatrix *PM,
+                                       unsigned int horizontal_partition,
+                                       unsigned int vertical_partition) {
+  unsigned int offset_column = 0;
 
-    if (partition->columns != 0 && partition->columns != columns) {
-      same_columns = false;
-      break;
-    }
+  for (unsigned int horiz = 0; horiz < horizontal_partition; ++horiz) {
+    offset_column +=
+        partitioned_matrix_get_partition(PM, horiz, vertical_partition)
+            ->column_span;
   }
-  assert(same_columns);
-  if (DEBUG)
-    puts("");
 
-  if (DEBUG)
-    puts("setting the partition");
-  Partition *partition =
-      partitioned_matrix_get_partition(PM, horizontal, vertical);
-  partition->rows = rows;
-  partition->columns = columns;
-  if (DEBUG)
-    puts("");
+  return offset_column;
 }
 
 Matrix *partitioned_matrix_get_matrix(const PartitionedMatrix *PM,
-                                      unsigned int horizontal,
-                                      unsigned int vertical) {
+                                      unsigned int horizontal_partition,
+                                      unsigned int vertical_partition) {
   if (DEBUG) {
-    printf("partitioned_matrix_get_matrix(%d, %d)\n", horizontal, vertical);
+    printf("partitioned_matrix_get_matrix(%d, %d)\n", horizontal_partition,
+           vertical_partition);
   }
 
-  unsigned int offset_row = 0;
-  for (unsigned int vert = 0; vert < vertical; ++vert) {
-    offset_row += partitioned_matrix_get_partition(PM, horizontal, vert)->rows;
-  }
-  if (DEBUG)
-    printf("offset_row: %d\n", offset_row);
+  unsigned int offset_row = partitioned_matrix_offset_row_index(
+      PM, horizontal_partition, vertical_partition);
 
-  unsigned int offset_column = 0;
-  for (unsigned int horiz = 0; horiz < horizontal; ++horiz) {
-    offset_column +=
-        partitioned_matrix_get_partition(PM, horiz, vertical)->columns;
-  }
-  if (DEBUG)
-    printf("offset_column: %d\n", offset_column);
+  unsigned int offset_column = partitioned_matrix_offset_column_index(
+      PM, horizontal_partition, vertical_partition);
 
-  if (DEBUG)
-    puts("getting the partition");
+  Partition *partition = partitioned_matrix_get_partition(
+      PM, horizontal_partition, vertical_partition);
 
-  Partition *partition =
-      partitioned_matrix_get_partition(PM, horizontal, vertical);
+  Matrix *C = matrix_create(partition->row_span, partition->column_span);
 
-  if (DEBUG)
-    printf("partition->rows = %d, partition->columns = %d\n", partition->rows,
-           partition->columns);
+  for (unsigned int partition_row = 0; partition_row < partition->row_span;
+       ++partition_row) {
+    for (unsigned int partition_column = 0;
+         partition_column < partition->column_span; ++partition_column) {
+      unsigned int matrix_row = offset_row + partition_row;
+      unsigned int matrix_column = offset_column + partition_column;
 
-  if (DEBUG)
-    puts("");
-
-  Matrix *C = matrix_create(partition->rows, partition->columns);
-
-  if (DEBUG)
-    puts("copying the matrix");
-
-  for (unsigned int row = 0; row < partition->rows; ++row) {
-    for (unsigned int column = 0; column < partition->columns; ++column) {
-      unsigned int i = offset_row + row;
-      unsigned int j = offset_column + column;
-      matrix_set(C, row, column, matrix_get(PM->M, i, j));
+      matrix_set(C, partition_row, partition_column,
+                 matrix_get(PM->M, matrix_row, matrix_column));
     }
   }
-
-  if (DEBUG)
-    puts("");
 
   return C;
 }
