@@ -304,3 +304,34 @@ unsigned int matrix_row_rank(const Matrix *M) {
 
   return nonzero_rows;
 }
+
+void matrix_gauss_jordan(Matrix *M) {
+  // "Beginning with the last pivot element and continuing sequentially
+  // backward"
+  for (unsigned int work_row = M->rows - 1; work_row > 0; --work_row) {
+    for (unsigned int work_column = 0; work_column < M->columns;
+         ++work_column) {
+      double p = matrix_get(M, work_row, work_column);
+      if (IS_ZERO(p - 1)) {
+        // "Each pivot element is used to transform all other elements in its
+        // column to zero"
+        for (unsigned int row = 0; row < work_row; ++row) {
+          double v = matrix_get(M, row, work_column);
+          for (unsigned int column = 0; column < M->columns; ++column) {
+            double x = matrix_get(M, row, column);
+            double y = matrix_get(M, work_row, column);
+            x -= v * y;
+            matrix_set(M, row, column, x);
+          }
+        }
+      }
+    }
+  }
+}
+
+void matrix_reduced_row_echelon(Matrix *M) {
+  // "Once the augmented matrix has been reduced to row-echelon form..."
+  matrix_row_echelon(M);
+  // "it is then reduced still further"
+  matrix_gauss_jordan(M);
+}

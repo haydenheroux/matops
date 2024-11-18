@@ -87,3 +87,13 @@ void matrix_row_echelon(Matrix *M);
  * Calculates the row rank of a matrix.
  */
 unsigned int matrix_row_rank(const Matrix *M);
+
+/*
+ * Performs Gauss-Jordan elimination on the matrix `M`.
+ */
+void matrix_gauss_jordan(Matrix *M);
+
+/*
+ * Transforms the matrix `M` to reduced row-echelon form.
+ */
+void matrix_reduced_row_echelon(Matrix *M);
