@@ -1,7 +1,6 @@
-#include "partition.h"
 #include <matrix.h>
+#include <partition.h>
 #include <stddef.h>
-#include <stdio.h>
 #include <test.h>
 #include <vector.h>
 
