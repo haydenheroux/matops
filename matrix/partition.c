@@ -183,15 +183,12 @@ Matrix *partitioned_matrix_get_matrix(const PartitionedMatrix *PM,
   return C;
 }
 
-void partitioned_matrix_set_matrix(const PartitionedMatrix *PM,
+void partitioned_matrix_set_matrix(PartitionedMatrix *PM,
                                    unsigned int vertical_partition,
                                    unsigned int horizontal_partition,
                                    const Matrix *M) {
-  Partition *partition = partitioned_matrix_get_partition(
-      PM, vertical_partition, horizontal_partition);
-
-  assert(M->rows == partition->row_span &&
-         M->columns == partition->column_span);
+  partitioned_matrix_set_partition(PM, vertical_partition, horizontal_partition,
+                                   M->rows, M->columns);
 
   unsigned int offset_row = partitioned_matrix_offset_row_index(
       PM, vertical_partition, horizontal_partition);

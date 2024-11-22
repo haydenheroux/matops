@@ -378,11 +378,6 @@ void problem_1_8() {
   matrix_set(F, 1, 1, -2);
 
   PartitionedMatrix *A_BCEF = partitioned_matrix_create(3, 4, 2, 2);
-  partitioned_matrix_set_partition(A_BCEF, 0, 0, 1, 2);
-  partitioned_matrix_set_partition(A_BCEF, 0, 1, 1, 2);
-  partitioned_matrix_set_partition(A_BCEF, 1, 0, 2, 2);
-  partitioned_matrix_set_partition(A_BCEF, 1, 1, 2, 2);
-
   partitioned_matrix_set_matrix(A_BCEF, 0, 0, B);
   partitioned_matrix_set_matrix(A_BCEF, 0, 1, C);
   partitioned_matrix_set_matrix(A_BCEF, 1, 0, E);
@@ -403,9 +398,6 @@ void problem_1_8() {
   matrix_set(H, 0, 2, -2);
 
   PartitionedMatrix *A_GH = partitioned_matrix_create(3, 4, 2, 1);
-  partitioned_matrix_set_partition(A_GH, 0, 0, 3, 3);
-  partitioned_matrix_set_partition(A_GH, 0, 1, 3, 1);
-
   partitioned_matrix_set_matrix(A_GH, 0, 0, G);
   partitioned_matrix_set_matrix(A_GH, 0, 1, H);
 

@@ -40,9 +40,6 @@ void problem_2_2() {
   matrix_set(B, 0, 2, 8);
 
   PartitionedMatrix *AX_B = partitioned_matrix_create(3, 4, 2, 1);
-  partitioned_matrix_set_partition(AX_B, 0, 0, 3, 3);
-  partitioned_matrix_set_partition(AX_B, 0, 1, 3, 1);
-
   partitioned_matrix_set_matrix(AX_B, 0, 0, A);
   partitioned_matrix_set_matrix(AX_B, 0, 1, B);
 

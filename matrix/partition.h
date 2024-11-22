@@ -105,7 +105,7 @@ Matrix *partitioned_matrix_get_matrix(const PartitionedMatrix *PM,
  * `vertical_partition` vertical partition and the `horizontal_partition`
  * horizontal partition to the matrix `M`.
  */
-void partitioned_matrix_set_matrix(const PartitionedMatrix *PM,
+void partitioned_matrix_set_matrix(PartitionedMatrix *PM,
                                    unsigned int vertical_partition,
                                    unsigned int horizontal_partition,
                                    const Matrix *M);
