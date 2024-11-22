@@ -22,6 +22,13 @@ Matrix *matrix_create(unsigned int rows, unsigned int columns);
 void matrix_delete(Matrix *M);
 
 /*
+ * Gets the index into the elements of the matrix `M` for row `row` and column
+ * `column`.
+ */
+unsigned int matrix_index(const Matrix *M, unsigned int row,
+                          unsigned int column);
+
+/*
  * Gets the element of the matrix `M` at row `row` and column `column`.
  */
 double matrix_get(const Matrix *M, unsigned int row, unsigned int column);

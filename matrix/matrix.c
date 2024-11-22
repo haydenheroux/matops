@@ -28,6 +28,11 @@ void matrix_delete(Matrix *M) {
   free(M);
 }
 
+unsigned int matrix_index(const Matrix *M, unsigned int row,
+                          unsigned int column) {
+  return INDEX(M, row, column);
+}
+
 double matrix_get(const Matrix *M, unsigned int row, unsigned int column) {
   if (DEBUG) {
     printf("matrix_get(%d, %d) of %d×%d\n", row, column, M->rows, M->columns);
