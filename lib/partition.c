@@ -1,7 +1,8 @@
-#include "partition.h"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "partition.h"
 
 #define DEBUG false
 #define INDEX(PM, v, h) v * PM->horizontal_partitions + h

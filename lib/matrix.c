@@ -1,8 +1,9 @@
 #include <assert.h>
 #include <math.h>
-#include <matrix.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "matrix.h"
 
 #define DEBUG false
 #define EPSILON 1E-14

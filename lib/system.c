@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "matrix.h"
 #include "system.h"
 
 System *system_create(const Matrix *A, const Matrix *B) {

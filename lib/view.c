@@ -1,8 +1,8 @@
 #include <assert.h>
-#include <matrix.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <view.h>
+
+#include "view.h"
 
 MatrixView *matrix_view_create(unsigned int size) {
   MatrixView *MV = malloc(sizeof(MatrixView));
