@@ -1,5 +1,6 @@
-#include <partition.h>
 #include <stdio.h>
+
+#include "partition.h"
 
 /*
  * PM = [ 1 2

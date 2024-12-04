@@ -1,8 +1,9 @@
-#include <matrix.h>
-#include <partition.h>
 #include <stddef.h>
-#include <test.h>
-#include <vector.h>
+
+#include "matrix.h"
+#include "partition.h"
+#include "test.h"
+#include "vector.h"
 
 /*
  * Problem 1.1

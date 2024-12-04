@@ -1,6 +1,6 @@
-#include <matrix.h>
 #include <stdio.h>
-#include <view.h>
+
+#include "view.h"
 
 /*
  * A = [ 2 -1

@@ -1,7 +1,5 @@
 #include "system.h"
-#include <matrix.h>
-#include <partition.h>
-#include <test.h>
+#include "test.h"
 
 /*
  * Problem 2.2
