@@ -1,43 +1,33 @@
 CC = gcc
-CFLAGS = -Wall -Imatrix -Itest -g
+CFLAGS = -Wall -Iinc
 
 BIN_DIR = bin
+LIB_DIR = lib
+SRC_DIR = src
 OBJ_DIR = obj
-$(shell mkdir -p $(BIN_DIR) $(OBJ_DIR))
 
-MAT_DIR = matrix
-TEST_DIR = test
-PROB_DIR = problems
+LIB_FILES = $(wildcard $(LIB_DIR)/*.c)
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 
-MAT_SRC = $(wildcard $(MAT_DIR)/*.c)
-TEST_SRC = $(wildcard $(TEST_DIR)/*.c)
-PROB_SRC = $(wildcard $(PROB_DIR)/*.c)
+LIB_OBJS = $(LIB_FILES:$(LIB_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRC_OBJS = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-MAT_OBJ = $(patsubst $(MAT_DIR)/%.c,$(OBJ_DIR)/%.o,$(MAT_SRC))
-TEST_OBJ = $(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR)/%.o,$(TEST_SRC))
-PROB_OBJ = $(patsubst $(PROB_DIR)/%.c,$(OBJ_DIR)/%.o,$(PROB_SRC))
+TARGETS = $(SRC_FILES:$(SRC_DIR)/%.c=$(BIN_DIR)/%)
 
-PROBLEMS = $(patsubst $(PROB_DIR)/%.c,$(BIN_DIR)/%,$(PROB_SRC))
+$(BIN_DIR)/%: $(OBJ_DIR)/%.o $(LIB_OBJS)
+	$(CC) $(OBJ_DIR)/$*.o $(LIB_OBJS) -o $@
 
-all: $(PROBLEMS)
-
-# Compile all problem binaries
-$(BIN_DIR)/%: $(MAT_OBJ) $(TEST_OBJ) $(OBJ_DIR)/%.o
-	$(CC) $(CFLAGS) -o $@ $^
-
-# Compile matrix library objects
-$(OBJ_DIR)/%.o: $(MAT_DIR)/%.c $(MAT_DIR)/%.h
+$(OBJ_DIR)/%.o: $(LIB_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile test library objects
-$(OBJ_DIR)/%.o: $(TEST_DIR)/%.c $(TEST_DIR)/%.h
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compile problem objects
-$(OBJ_DIR)/%.o: $(PROB_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+.PHONY: all clean
+
+all: $(TARGETS)
 
 clean:
 	rm -f $(OBJ_DIR)/* $(BIN_DIR)/*
-
-.PHONY: all clean
