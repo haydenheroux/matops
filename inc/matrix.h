@@ -3,12 +3,24 @@
 #include <stdbool.h>
 
 /*
+ * A view into a constant matrix with `size` elements. Intended to be used
+ * for immutable matrix operations.
+ */
+typedef struct {
+  double **elements;
+  unsigned int size;
+} MatrixView;
+
+/*
  * A constant matrix with `rows` rows and `columns` columns.
  */
 typedef struct {
   unsigned int rows;
   unsigned int columns;
   double *elements;
+
+  MatrixView **row_views;
+  MatrixView **column_views;
 } Matrix;
 
 /*

@@ -3,15 +3,6 @@
 #include "matrix.h"
 
 /*
- * A view into a constant matrix with `size` elements. Intended to be used
- * for immutable matrix operations.
- */
-typedef struct {
-  double **elements;
-  unsigned int size;
-} MatrixView;
-
-/*
  * Creates a zero-valued constant matrix view with `size` elements.
  */
 MatrixView *matrix_view_create(unsigned int size);

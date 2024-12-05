@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "matrix.h"
+#include "view.h"
 
 #define DEBUG false
 #define EPSILON 1E-14
@@ -14,12 +15,21 @@
 Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   Matrix *M = malloc(sizeof(Matrix));
 
-  unsigned int size = rows * columns;
-  double *elements = calloc(size, sizeof(double));
-
-  M->elements = elements;
   M->rows = rows;
   M->columns = columns;
+  M->elements = calloc(M->rows * M->columns, sizeof(double));
+
+  M->row_views = calloc(M->rows, sizeof(MatrixView));
+  for (unsigned int row = 0; row < M->rows; ++row) {
+    M->row_views[row] = matrix_view_create(M->columns);
+    matrix_view_row(M->row_views[row], M, row);
+  }
+
+  M->column_views = calloc(M->columns, sizeof(MatrixView));
+  for (unsigned int column = 0; column < M->columns; ++column) {
+    M->column_views[column] = matrix_view_create(M->rows);
+    matrix_view_column(M->column_views[column], M, column);
+  }
 
   return M;
 }
@@ -157,21 +167,16 @@ Matrix *matrix_matrix_multiply(const Matrix *A, const Matrix *B) {
     return NULL;
   }
 
-  double common_dimension = A->columns;
-
   // "Then the product AB is defined to be the matrix C of order r×c..."
   Matrix *C = matrix_create(A->rows, B->columns);
 
-  // TODO Write using vectors, dot product
-  for (unsigned int row = 0; row < A->rows; ++row) {
-    for (unsigned int column = 0; column < B->columns; ++column) {
-      double sum = 0.0;
-
-      for (unsigned int index = 0; index < common_dimension; ++index) {
-        sum += matrix_get(A, row, index) * matrix_get(B, index, column);
-      }
-
-      matrix_set(C, row, column, sum);
+  // "Each element cij of AB is a dot product; it is obtained by forming the
+  // transpose of the ith trow of A and then taking its dot product with the jth
+  // column of B."
+  for (unsigned int i = 0; i < A->rows; ++i) {
+    for (unsigned int j = 0; j < B->columns; ++j) {
+      double cij = matrix_view_dot(A->row_views[i], B->column_views[j]);
+      matrix_set(C, i, j, cij);
     }
   }
 
