@@ -15,6 +15,7 @@ SRC_OBJS = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 TARGETS = $(SRC_FILES:$(SRC_DIR)/%.c=$(BIN_DIR)/%)
 
 $(BIN_DIR)/%: $(OBJ_DIR)/%.o $(LIB_OBJS)
+	@mkdir -p $(BIN_DIR)
 	$(CC) $(OBJ_DIR)/$*.o $(LIB_OBJS) -o $@
 
 $(OBJ_DIR)/%.o: $(LIB_DIR)/%.c
