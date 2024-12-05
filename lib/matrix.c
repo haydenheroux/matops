@@ -24,6 +24,19 @@ Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   return M;
 }
 
+Matrix *matrix_create_identity(unsigned int rows, unsigned int columns) {
+  // TODO Support non-square identity matrices
+  assert(rows == columns);
+
+  Matrix *M = matrix_create(rows, columns);
+
+  for (unsigned int i = 0; i < rows; ++i) {
+    matrix_set(M, i, i, 1);
+  }
+
+  return M;
+}
+
 void matrix_delete(Matrix *M) {
   free(M->elements);
   free(M);
