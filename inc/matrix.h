@@ -17,9 +17,9 @@ typedef struct {
 Matrix *matrix_create(unsigned int rows, unsigned int columns);
 
 /*
- * Creates a constant identity matrix with `rows` rows and `columns` columns.
+ * Creates a constant identity matrix with `size` rows and `size` columns.
  */
-Matrix *matrix_create_identity(unsigned int rows, unsigned int columns);
+Matrix *matrix_create_identity(unsigned int size);
 
 /*
  * Deletes the matrix `M`.

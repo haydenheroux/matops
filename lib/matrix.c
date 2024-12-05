@@ -24,13 +24,10 @@ Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   return M;
 }
 
-Matrix *matrix_create_identity(unsigned int rows, unsigned int columns) {
-  // TODO Support non-square identity matrices
-  assert(rows == columns);
+Matrix *matrix_create_identity(unsigned int size) {
+  Matrix *M = matrix_create(size, size);
 
-  Matrix *M = matrix_create(rows, columns);
-
-  for (unsigned int i = 0; i < rows; ++i) {
+  for (unsigned int i = 0; i < size; ++i) {
     matrix_set(M, i, i, 1);
   }
 

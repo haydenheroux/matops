@@ -273,7 +273,7 @@ void problem_3_11() {
   Matrix *A9 = matrix_copy(A);
   matrix_scalar_multiply(A9, -9);
 
-  Matrix *I10 = matrix_create_identity(3, 3);
+  Matrix *I10 = matrix_create_identity(3);
   matrix_scalar_multiply(I10, 10);
 
   Matrix *R = matrix_copy(A_3);
