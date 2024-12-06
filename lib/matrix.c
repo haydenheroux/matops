@@ -186,6 +186,13 @@ void matrix_add(Matrix *A, const Matrix *B) {
   }
 }
 
+Matrix *matrix_sum(const Matrix *A, const Matrix *B) {
+  Matrix *C = matrix_copy(A);
+  matrix_add(C, B);
+
+  return C;
+}
+
 void matrix_scalar_multiply(Matrix *M, double scalar) {
   // "The matrix kA is obtained by multiplying ever element of A by the scalar
   // k"
@@ -194,6 +201,13 @@ void matrix_scalar_multiply(Matrix *M, double scalar) {
       matrix_set(M, row, column, scalar * matrix_get(M, row, column));
     }
   }
+}
+
+Matrix *matrix_scalar_multiplied(const Matrix *M, double scalar) {
+  Matrix *R = matrix_copy(M);
+  matrix_scalar_multiply(R, scalar);
+
+  return R;
 }
 
 double matrix_view_dot(const MatrixView *A, const MatrixView *B) {

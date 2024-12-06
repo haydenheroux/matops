@@ -69,11 +69,8 @@ void problem_1_2() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_ = matrix_copy(A);
-  matrix_add(A_, B);
-
-  Matrix *B_ = matrix_copy(B);
-  matrix_add(B_, A);
+  Matrix *A_ = matrix_sum(A, B);
+  Matrix *B_ = matrix_sum(B, A);
 
   test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_, B_));
 }
@@ -98,13 +95,10 @@ void problem_1_3() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_ = matrix_copy(A);
-  matrix_scalar_multiply(A_, 3);
+  Matrix *A_ = matrix_scalar_multiplied(A, 3);
+  Matrix *B_ = matrix_scalar_multiplied(B, -0.5);
 
-  Matrix *B_ = matrix_copy(B);
-  matrix_scalar_multiply(B_, -0.5);
-
-  matrix_add(A_, B_);
+  Matrix *A_B_ = matrix_sum(A_, B_);
 
   Matrix *R = matrix_create(2, 2);
   matrix_set(R, 0, 0, -2);
@@ -112,7 +106,7 @@ void problem_1_3() {
   matrix_set(R, 1, 0, 3);
   matrix_set(R, 1, 1, 12.5);
 
-  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_, R));
+  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_B_, R));
 }
 
 /*

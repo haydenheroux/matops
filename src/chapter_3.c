@@ -270,14 +270,12 @@ void problem_3_11() {
   Matrix *A_2 = matrix_matrix_multiply(A, A);
   Matrix *A_3 = matrix_matrix_multiply(A_2, A);
 
-  Matrix *A9 = matrix_copy(A);
-  matrix_scalar_multiply(A9, -9);
+  Matrix *A9 = matrix_scalar_multiplied(A, -9);
 
   Matrix *I10 = matrix_create_identity(3);
   matrix_scalar_multiply(I10, 10);
 
-  Matrix *R = matrix_copy(A_3);
-  matrix_add(R, A9);
+  Matrix *R = matrix_sum(A_3, A9);
   matrix_add(R, I10);
 
   // NOTE Zero row rank is equivalent to checking all elements for zero

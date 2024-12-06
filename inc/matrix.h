@@ -100,9 +100,20 @@ bool matrix_are_equal(const Matrix *A, const Matrix *B);
 void matrix_add(Matrix *A, const Matrix *B);
 
 /*
+ * Creates a matrix containing the sum of the matrices `A` and `B`.
+ */
+Matrix *matrix_sum(const Matrix *A, const Matrix *B);
+
+/*
  * Multiplies elements of the matrix `M` by the scalar `scalar`.
  */
 void matrix_scalar_multiply(Matrix *M, double scalar);
+
+/*
+ * Creates a matrix containing the result of multiplying the elements of `M` by
+ * the scalar `scalar`.
+ */
+Matrix *matrix_scalar_multiplied(const Matrix *M, double scalar);
 
 /*
  * Calculates the vector dot product of two matrix views.
