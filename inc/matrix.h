@@ -3,13 +3,33 @@
 #include <stdbool.h>
 
 /*
- * A view into a constant matrix with `size` elements. Intended to be used
- * for immutable matrix operations.
+ * A view with `size` elements into a constant matrix. Used
+ * for iterating matrix components.
  */
 typedef struct {
   double **elements;
   unsigned int size;
 } MatrixView;
+
+/*
+ * Creates a zero-valued constant matrix view with `size` elements.
+ */
+MatrixView *matrix_view_create(unsigned int size);
+
+/*
+ * Deletes the matrix view `MV`.
+ */
+void matrix_view_delete(MatrixView *MV);
+
+/*
+ * Gets value of the element of the matrix view `MV` at index `index`.
+ */
+double matrix_view_get(const MatrixView *MV, unsigned int index);
+
+/*
+ * Prints the values of elements of the matrix view `MV`.
+ */
+void matrix_view_print(const MatrixView *MV);
 
 /*
  * A constant matrix with `rows` rows and `columns` columns.
@@ -37,13 +57,6 @@ Matrix *matrix_create_identity(unsigned int size);
  * Deletes the matrix `M`.
  */
 void matrix_delete(Matrix *M);
-
-/*
- * Gets the index into the elements of the matrix `M` for row `row` and column
- * `column`.
- */
-unsigned int matrix_index(const Matrix *M, unsigned int row,
-                          unsigned int column);
 
 /*
  * Gets the element of the matrix `M` at row `row` and column `column`.
@@ -90,6 +103,11 @@ void matrix_add(Matrix *A, const Matrix *B);
  * Multiplies elements of the matrix `M` by the scalar `scalar`.
  */
 void matrix_scalar_multiply(Matrix *M, double scalar);
+
+/*
+ * Calculates the vector dot product of two matrix views.
+ */
+double matrix_view_dot(const MatrixView *A, const MatrixView *B);
 
 /*
  * Creates a matrix containing the result of multiplying the matrices `A` and

@@ -4,13 +4,41 @@
 #include <stdlib.h>
 
 #include "matrix.h"
-#include "view.h"
 
 #define DEBUG false
 #define EPSILON 1E-14
 #define INDEX(M, r, c) r * M->columns + c
 #define IS_ZERO(x) fabs(x) <= EPSILON
 #define IS_NONZERO(x) fabs(x) > EPSILON
+
+MatrixView *matrix_view_create(unsigned int size) {
+  MatrixView *MV = malloc(sizeof(MatrixView));
+
+  double **elements = calloc(size, sizeof(double *));
+
+  MV->elements = elements;
+  MV->size = size;
+
+  return MV;
+}
+
+void matrix_view_delete(MatrixView *MV) {
+  free(MV->elements);
+  free(MV);
+}
+
+double matrix_view_get(const MatrixView *MV, unsigned int index) {
+  assert(0 <= index && index < MV->size);
+
+  return *MV->elements[index];
+}
+
+void matrix_view_print(const MatrixView *MV) {
+  for (unsigned int element = 0; element < MV->size; ++element) {
+    printf("%f%c", matrix_view_get(MV, element),
+           element < MV->size - 1 ? ' ' : '\n');
+  }
+}
 
 Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   Matrix *M = malloc(sizeof(Matrix));
@@ -22,13 +50,20 @@ Matrix *matrix_create(unsigned int rows, unsigned int columns) {
   M->row_views = calloc(M->rows, sizeof(MatrixView));
   for (unsigned int row = 0; row < M->rows; ++row) {
     M->row_views[row] = matrix_view_create(M->columns);
-    matrix_view_row(M->row_views[row], M, row);
+
+    for (unsigned int column = 0; column < M->columns; ++column) {
+      M->row_views[row]->elements[column] = &M->elements[INDEX(M, row, column)];
+    }
   }
 
   M->column_views = calloc(M->columns, sizeof(MatrixView));
   for (unsigned int column = 0; column < M->columns; ++column) {
     M->column_views[column] = matrix_view_create(M->rows);
-    matrix_view_column(M->column_views[column], M, column);
+
+    for (unsigned int row = 0; row < M->rows; ++row) {
+      M->column_views[column]->elements[row] =
+          &M->elements[INDEX(M, row, column)];
+    }
   }
 
   return M;
@@ -47,11 +82,6 @@ Matrix *matrix_create_identity(unsigned int size) {
 void matrix_delete(Matrix *M) {
   free(M->elements);
   free(M);
-}
-
-unsigned int matrix_index(const Matrix *M, unsigned int row,
-                          unsigned int column) {
-  return INDEX(M, row, column);
 }
 
 double matrix_get(const Matrix *M, unsigned int row, unsigned int column) {
@@ -158,6 +188,21 @@ void matrix_scalar_multiply(Matrix *M, double scalar) {
       matrix_set(M, row, column, scalar * matrix_get(M, row, column));
     }
   }
+}
+
+double matrix_view_dot(const MatrixView *A, const MatrixView *B) {
+  // "The dot product A·B of two vectors of the same order..."
+  assert(A->size == B->size);
+
+  double sum = 0.0;
+
+  // "...is obtained by multiplying together corresponding elements of A and B
+  // and then summing the results"
+  for (unsigned int element = 0; element < A->size; ++element) {
+    sum += *A->elements[element] * *B->elements[element];
+  }
+
+  return sum;
 }
 
 Matrix *matrix_matrix_multiply(const Matrix *A, const Matrix *B) {
