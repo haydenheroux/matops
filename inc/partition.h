@@ -46,19 +46,18 @@ Partition *partitioned_matrix_get_partition(const PartitionedMatrix *PM,
                                             unsigned int horizontal_partition);
 
 /*
- * Calculates the number of rows of the partitioned matrix `PM` spanned by
+ * Calculates the number of column of the partitioned matrix `PM` spanned by
  * the partitions in the `vertical_partition` vertical partition.
  */
-unsigned int
-partitioned_matrix_vertical_partition_row_span(const PartitionedMatrix *PM,
-                                               unsigned int vertical_partition);
+unsigned int partitioned_matrix_column_span(const PartitionedMatrix *PM,
+                                            unsigned int vertical_partition);
 
 /*
- * Calculates the number of columns of the partitioned matrix `PM` spanned by
+ * Calculates the number of rows of the partitioned matrix `PM` spanned by
  * the partitions in the `horizontal_partition` horizontal partition.
  */
-unsigned int partitioned_matrix_horizontal_partition_column_span(
-    const PartitionedMatrix *PM, unsigned int horizontal_partition);
+unsigned int partitioned_matrix_row_span(const PartitionedMatrix *PM,
+                                         unsigned int horizontal_partition);
 
 /*
  * Sets the partition of the partitioned matrix `PM` at the

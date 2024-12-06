@@ -380,8 +380,8 @@ void problem_1_8() {
 
   PartitionedMatrix *A_BCEF = partitioned_matrix_create(3, 4, 2, 2);
   partitioned_matrix_set_matrix(A_BCEF, 0, 0, B);
-  partitioned_matrix_set_matrix(A_BCEF, 0, 1, C);
-  partitioned_matrix_set_matrix(A_BCEF, 1, 0, E);
+  partitioned_matrix_set_matrix(A_BCEF, 1, 0, C);
+  partitioned_matrix_set_matrix(A_BCEF, 0, 1, E);
   partitioned_matrix_set_matrix(A_BCEF, 1, 1, F);
 
   Matrix *G = matrix_create(3, 3);
@@ -395,12 +395,12 @@ void problem_1_8() {
 
   Matrix *H = matrix_create(3, 1);
   matrix_set(H, 0, 0, 4);
-  matrix_set(H, 0, 1, 6);
-  matrix_set(H, 0, 2, -2);
+  matrix_set(H, 1, 0, 6);
+  matrix_set(H, 2, 0, -2);
 
   PartitionedMatrix *A_GH = partitioned_matrix_create(3, 4, 2, 1);
   partitioned_matrix_set_matrix(A_GH, 0, 0, G);
-  partitioned_matrix_set_matrix(A_GH, 0, 1, H);
+  partitioned_matrix_set_matrix(A_GH, 1, 0, H);
 
   test("A = A_BCEF", "A ≠ A_BCEF", matrix_are_equal(A, A_BCEF->M));
   test("A = A_GH", "A ≠ A_GH", matrix_are_equal(A, A_GH->M));

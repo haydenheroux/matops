@@ -35,12 +35,12 @@ void problem_2_2() {
 
   Matrix *B = matrix_create(3, 1);
   matrix_set(B, 0, 0, 5);
-  matrix_set(B, 0, 1, 1);
-  matrix_set(B, 0, 2, 8);
+  matrix_set(B, 1, 0, 1);
+  matrix_set(B, 2, 0, 8);
 
   PartitionedMatrix *AX_B = partitioned_matrix_create(3, 4, 2, 1);
   partitioned_matrix_set_matrix(AX_B, 0, 0, A);
-  partitioned_matrix_set_matrix(AX_B, 0, 1, B);
+  partitioned_matrix_set_matrix(AX_B, 1, 0, B);
 
   Matrix *R = matrix_create(3, 4);
   matrix_set(R, 0, 0, 2);
@@ -85,19 +85,19 @@ void problem_2_13() {
 
   Matrix *B = matrix_create(3, 1);
   matrix_set(B, 0, 0, 6);
-  matrix_set(B, 0, 1, 10);
-  matrix_set(B, 0, 2, -2);
+  matrix_set(B, 1, 0, 10);
+  matrix_set(B, 2, 0, -2);
 
   System *S = system_create(A, B);
 
   PartitionedMatrix *AX_B_ = system_solve(S);
 
-  Matrix *B_ = partitioned_matrix_get_matrix(AX_B_, 0, 1);
+  Matrix *B_ = partitioned_matrix_get_matrix(AX_B_, 1, 0);
 
   Matrix *R = matrix_create(3, 1);
   matrix_set(R, 0, 0, 1);
-  matrix_set(R, 0, 1, 2);
-  matrix_set(R, 0, 2, -1);
+  matrix_set(R, 1, 0, 2);
+  matrix_set(R, 2, 0, -1);
 
   test("consistent", "not consistent", system_is_consistent(S));
   test("unique solution", "no unique solution", system_has_unique_solution(S));
@@ -135,7 +135,6 @@ void problem_2_14() {
 }
 
 int main() {
-  // TODO
   problem_2_2();
   problem_2_13();
   problem_2_14();

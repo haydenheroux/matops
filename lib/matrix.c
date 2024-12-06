@@ -89,6 +89,9 @@ double matrix_get(const Matrix *M, unsigned int row, unsigned int column) {
     printf("matrix_get(%d, %d) of %d×%d\n", row, column, M->rows, M->columns);
   }
 
+  assert(0 <= row && row < M->rows);
+  assert(0 <= column && column < M->columns);
+
   return M->elements[INDEX(M, row, column)];
 }
 
@@ -98,6 +101,9 @@ void matrix_set(Matrix *M, unsigned int row, unsigned int column,
     printf("matrix_set(%d, %d, %f) of %d×%d\n", row, column, value, M->rows,
            M->columns);
   }
+
+  assert(0 <= row && row < M->rows);
+  assert(0 <= column && column < M->columns);
 
   M->elements[INDEX(M, row, column)] = value;
 }
