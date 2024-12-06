@@ -7,8 +7,8 @@
  * for iterating matrix components.
  */
 typedef struct {
-  double **elements;
   unsigned int size;
+  double **elements;
 } MatrixView;
 
 /*

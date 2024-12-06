@@ -38,9 +38,9 @@ void problem_2_2() {
   matrix_set(B, 1, 0, 1);
   matrix_set(B, 2, 0, 8);
 
-  PartitionedMatrix *AX_B = partitioned_matrix_create(3, 4, 2, 1);
+  PartitionedMatrix *AX_B = partitioned_matrix_create(3, 4, 1, 2);
   partitioned_matrix_set_matrix(AX_B, 0, 0, A);
-  partitioned_matrix_set_matrix(AX_B, 1, 0, B);
+  partitioned_matrix_set_matrix(AX_B, 0, 1, B);
 
   Matrix *R = matrix_create(3, 4);
   matrix_set(R, 0, 0, 2);
@@ -92,7 +92,7 @@ void problem_2_13() {
 
   PartitionedMatrix *AX_B_ = system_solve(S);
 
-  Matrix *B_ = partitioned_matrix_get_matrix(AX_B_, 1, 0);
+  Matrix *B_ = partitioned_matrix_get_matrix(AX_B_, 0, 1);
 
   Matrix *R = matrix_create(3, 1);
   matrix_set(R, 0, 0, 1);

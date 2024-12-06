@@ -11,9 +11,9 @@ System *system_create(const Matrix *A, const Matrix *B) {
 
   S->A = matrix_copy(A);
   S->B = matrix_copy(B);
-  S->AX_B = partitioned_matrix_create(A->rows, A->columns + B->columns, 2, 1);
+  S->AX_B = partitioned_matrix_create(A->rows, A->columns + B->columns, 1, 2);
   partitioned_matrix_set_matrix(S->AX_B, 0, 0, S->A);
-  partitioned_matrix_set_matrix(S->AX_B, 1, 0, S->B);
+  partitioned_matrix_set_matrix(S->AX_B, 0, 1, S->B);
 
   return S;
 }
@@ -45,9 +45,9 @@ PartitionedMatrix *system_solve(const System *S) {
   // TODO Implement `partitioned_matrix_copy` to avoid remaking `AX_B` from
   // scratch without disrupting `S->AX_B`
   PartitionedMatrix *AX_B = partitioned_matrix_create(
-      S->A->rows, S->A->columns + S->B->columns, 2, 1);
+      S->A->rows, S->A->columns + S->B->columns, 1, 2);
   partitioned_matrix_set_matrix(AX_B, 0, 0, S->A);
-  partitioned_matrix_set_matrix(AX_B, 1, 0, S->B);
+  partitioned_matrix_set_matrix(AX_B, 0, 1, S->B);
 
   // NOTE Use Gauss-Jordan elimination to avoid back-substitution
   matrix_reduced_row_echelon(AX_B->M);
