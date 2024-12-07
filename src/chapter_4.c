@@ -172,10 +172,9 @@ void problem_4_4() {
 
   Matrix *A_inv = matrix_inverse(A);
   Matrix *B_inv = matrix_inverse(B);
-  return;
 
   Matrix *R = matrix_create(4, 4);
-  matrix_set(R, 0, 0, 1);
+  matrix_set(R, 0, 0, -1);
   matrix_set(R, 0, 1, 0);
   matrix_set(R, 0, 2, 0);
   matrix_set(R, 0, 3, 0);
@@ -192,7 +191,7 @@ void problem_4_4() {
   matrix_set(R, 3, 2, 1.0 / 2.0);
   matrix_set(R, 3, 3, 1.0 / 3.0);
 
-  test("A is singular", "A has an inverse", A_inv == NULL);
+  test("A is singular", "A is nonsingular", A_inv == NULL);
   test("B is nonsingular", "B is singular", B_inv != NULL);
   test("B⁻¹ = R", "B⁻¹ ≠ R", matrix_are_equal(B_inv, R));
 }
