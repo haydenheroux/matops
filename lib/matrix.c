@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "matrix.h"
+#include "partition.h"
 
 #define DEBUG false
 #define EPSILON 1E-14
@@ -420,4 +421,66 @@ void matrix_reduced_row_echelon(Matrix *M) {
   matrix_row_echelon(M);
   // "it is then reduced still further"
   matrix_gauss_jordan(M);
+}
+
+bool matrix_are_inverses(const Matrix *A, const Matrix *B) {
+  if (matrix_are_same_order(A, B) == false) {
+    return false;
+  }
+
+  // TODO Checking both cases may not be necessary
+  if (A->rows != A->columns || B->rows != B->columns) {
+    return false;
+  }
+
+  Matrix *AB = matrix_matrix_multiply(A, B);
+  Matrix *BA = matrix_matrix_multiply(B, A);
+
+  Matrix *I = matrix_create_identity(A->rows);
+
+  return matrix_are_equal(AB, I) && matrix_are_equal(BA, I);
+}
+
+Matrix *matrix_inverse(const Matrix *M) {
+  assert(M->rows == M->columns);
+
+  // "Step 4.1: Form the partitioned matrix [ M | I ], where I is the identity
+  // matrix having the same order as M"
+  Matrix *I = matrix_create_identity(M->rows);
+  PartitionedMatrix *M_I =
+      partitioned_matrix_create(M->rows, M->columns + I->columns, 1, 2);
+  partitioned_matrix_set_matrix(M_I, 0, 0, M);
+  partitioned_matrix_set_matrix(M_I, 0, 1, I);
+  matrix_delete(I);
+
+  // "Step 4.2: Using elementary row operations, transform M into row-echelon
+  // form, applying each row operation to the entire partitioned matrix formed
+  // in Step 1. Denote the result as [ C | D ], where C is in row-echelon form."
+  matrix_row_echelon(M_I->M);
+
+  // "Step 4.3: If C has has a zero row, stop; the original matrix M does not
+  // have an inverse. Otherwise continue; the original matrix has an inverse."
+  Matrix *C = partitioned_matrix_get_matrix(M_I, 0, 0);
+  if (matrix_row_rank(C) != C->rows) {
+    matrix_delete(C);
+    return NULL;
+  }
+  matrix_delete(C);
+
+  // "Beginning with the last column of C and progressing backward iteratively
+  // through the second column ... transform all elements above the diagonal of
+  // C to zero."
+  for (unsigned int work_column = M->columns - 1; work_column >= 1;
+       --work_column) {
+    for (unsigned int row = 0; row < work_column; ++row) {
+      double t = matrix_get(M_I->M, row, work_column);
+      for (unsigned int column = 0; column < M_I->M->columns; ++column) {
+        double w = matrix_get(M_I->M, work_column, column);
+        double r = matrix_get(M_I->M, row, column);
+        matrix_set(M_I->M, row, column, r - w * t);
+      }
+    }
+  }
+
+  return partitioned_matrix_get_matrix(M_I, 0, 1);
 }

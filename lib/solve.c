@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "system.h"
+#include "solve.h"
 
 System *system_create(const Matrix *A, const Matrix *B) {
   assert(A->rows == B->rows);

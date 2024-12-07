@@ -150,3 +150,13 @@ void matrix_gauss_jordan(Matrix *M);
  * Transforms the matrix `M` to reduced row-echelon form.
  */
 void matrix_reduced_row_echelon(Matrix *M);
+
+/*
+ * Tests if two matrices are inverses.
+ */
+bool matrix_are_inverses(const Matrix *A, const Matrix *B);
+
+/*
+ * Creates a matrix containing the inverse of the matrix.
+ */
+Matrix *matrix_inverse(const Matrix *M);
