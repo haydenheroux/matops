@@ -55,7 +55,7 @@ void problem_2_2() {
   matrix_set(R, 2, 2, 1);
   matrix_set(R, 2, 3, 8);
 
-  test("A|B = R", "A|B ≠ R", matrix_are_equal(augmented->M, R));
+  test_matrix_are_equal("A|B", "R", augmented->M, R);
 }
 
 /*
@@ -101,7 +101,7 @@ void problem_2_13() {
 
   test("consistent", "not consistent", system_is_consistent(S));
   test("unique solution", "no unique solution", system_has_unique_solution(S));
-  test("B′ = R", "B′ ≠ R", matrix_are_equal(B_prime, R));
+  test_matrix_are_equal("B′", "R", B_prime, R);
 }
 
 /*

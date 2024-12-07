@@ -72,7 +72,7 @@ void problem_1_2() {
   Matrix *A_plus_B = matrix_sum(A, B);
   Matrix *B_plus_A = matrix_sum(B, A);
 
-  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_plus_B, B_plus_A));
+  test_matrix_are_equal("A+B", "B+A", A_plus_B, B_plus_A);
 }
 
 /*
@@ -106,8 +106,7 @@ void problem_1_3() {
   matrix_set(R, 1, 0, 3);
   matrix_set(R, 1, 1, 12.5);
 
-  test("3A - 0.5B = R", "3A - 0.5B ≠ R",
-       matrix_are_equal(A_times_plus_B_times, R));
+  test_matrix_are_equal("3A - 0.5B", "R", A_times_plus_B_times, R);
 }
 
 /*
@@ -148,10 +147,10 @@ void problem_1_4() {
   matrix_set(R_BA, 1, 0, -14);
   matrix_set(R_BA, 1, 1, -15);
 
-  test("AB = R_AB", "AB ≠ R_AB", matrix_are_equal(AB, R_AB));
-  test("BA = R_BA", "BA ≠ R_BA", matrix_are_equal(BA, R_BA));
+  test_matrix_are_equal("AB", "R_AB", AB, R_AB);
+  test_matrix_are_equal("BA", "R_BA", BA, R_BA);
   // "Note that, for these matrices, AB ≠ BA."
-  test("AB ≠ BA", "AB = BA", !matrix_are_equal(AB, BA));
+  test_matrix_are_not_equal("AB", "BA", AB, BA);
 }
 
 /*
@@ -195,8 +194,8 @@ void problem_1_5() {
   matrix_set(R_BA, 1, 1, 45);
   matrix_set(R_BA, 1, 2, -54);
 
-  test("AB = NULL", "AB ≠ NULL", AB == NULL);
-  test("BA = R_BA", "BA ≠ R_BA", matrix_are_equal(BA, R_BA));
+  test("AB is not defined", "AB is defined", AB == NULL);
+  test_matrix_are_equal("BA", "R_BA", BA, R_BA);
 }
 
 /*
@@ -226,8 +225,7 @@ void problem_1_6() {
   Matrix *BA = matrix_matrix_multiply(B, A);
   Matrix *BA_transpose = matrix_transpose(BA);
 
-  test("(BA)ᵀ = AᵀBᵀ", "(BA)ᵀ ≠ AᵀBᵀ",
-       matrix_are_equal(BA_transpose, A_transpose_B_transpose));
+  test_matrix_are_equal("(BA)ᵀ", "AᵀBᵀ", BA_transpose, A_transpose_B_transpose);
 }
 
 /*
@@ -307,11 +305,11 @@ void problem_1_7() {
   matrix_set(R_AC, 2, 1, -2);
   matrix_set(R_AC, 2, 2, 1);
 
-  test("AB = R_AB", "AB ≠ R_AB", matrix_are_equal(AB, R_AB));
-  test("AC = R_AC", "AC ≠ R_AC", matrix_are_equal(AC, R_AC));
+  test_matrix_are_equal("AB", "R_AB", AB, R_AB);
+  test_matrix_are_equal("AC", "R_AC", AC, R_AC);
   // "Note that, for these matrices, AB = AC and yet B ≠ C."
-  test("AB = AC", "AB ≠ AC", matrix_are_equal(AB, AC));
-  test("B ≠ C", "B = C", !matrix_are_equal(B, C));
+  test_matrix_are_equal("AB", "AC", AB, AC);
+  test_matrix_are_not_equal("B", "C", B, C);
 }
 
 /*
@@ -399,8 +397,8 @@ void problem_1_8() {
   partitioned_matrix_set_matrix(GH, 0, 0, G);
   partitioned_matrix_set_matrix(GH, 0, 1, H);
 
-  test("A = A_BCEF", "A ≠ A_BCEF", matrix_are_equal(A, BCEF->M));
-  test("A = A_GH", "A ≠ A_GH", matrix_are_equal(A, GH->M));
+  test_matrix_are_equal("A", "BCEF", A, BCEF->M);
+  test_matrix_are_equal("A", "GH", A, GH->M);
 }
 
 /*
@@ -538,9 +536,9 @@ void problem_1_12() {
   matrix_set(R_E, 1, 1, 1);
   matrix_set(R_E, 1, 2, -5);
 
-  test("B = R_B", "B ≠ R_B", matrix_are_equal(B, R_B));
-  test("C = R_C", "C ≠ R_C", matrix_are_equal(C, R_C));
-  test("E = R_E", "E ≠ R_E", matrix_are_equal(E, R_E));
+  test_matrix_are_equal("B", "R_B", B, R_B);
+  test_matrix_are_equal("C", "R_C", C, R_C);
+  test_matrix_are_equal("E", "R_E", E, R_E);
 }
 
 /*
@@ -584,7 +582,7 @@ void problem_1_13() {
   matrix_set(R, 2, 2, 1);
   matrix_set(R, 2, 3, -1);
 
-  test("A = R", "A ≠ R", matrix_are_equal(A, R));
+  test_matrix_are_equal("A", "R", A, R);
 }
 
 /*
@@ -625,7 +623,7 @@ void problem_1_14() {
   matrix_set(R, 1, 3, -13.0 / 9.0);
   matrix_set(R, 2, 3, 1);
 
-  test("A = R", "A ≠ R", matrix_are_equal(A, R));
+  test_matrix_are_equal("A", "R", A, R);
 }
 
 /*
@@ -671,7 +669,7 @@ void problem_1_15() {
   matrix_set(R, 1, 3, 1);
   matrix_set(R, 1, 4, -1);
 
-  test("A = R", "A ≠ R", matrix_are_equal(A, R));
+  test_matrix_are_equal("A", "R", A, R);
 }
 
 /*

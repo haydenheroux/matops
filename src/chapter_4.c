@@ -108,7 +108,7 @@ void problem_4_3() {
   matrix_set(R, 2, 2, 1.0 / 3.0);
 
   test("A is nonsingular", "A is singular", A_inverse != NULL);
-  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inverse, R));
+  test_matrix_are_equal("A⁻¹", "R", A_inverse, R);
 }
 
 /*
@@ -193,7 +193,7 @@ void problem_4_4() {
 
   test("A is singular", "A is nonsingular", A_inverse == NULL);
   test("B is nonsingular", "B is singular", B_inverse != NULL);
-  test("B⁻¹ = R", "B⁻¹ ≠ R", matrix_are_equal(B_inverse, R));
+  test_matrix_are_equal("B⁻¹", "R", B_inverse, R);
 }
 
 /*
@@ -214,7 +214,7 @@ void problem_4_5() {
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 1);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
   Matrix *R = matrix_create(2, 2);
   matrix_set(R, 0, 0, -1);
@@ -222,8 +222,8 @@ void problem_4_5() {
   matrix_set(R, 1, 0, 2);
   matrix_set(R, 1, 1, -5);
 
-  test("A is nonsingular", "A is singular", A_inv != NULL);
-  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inv, R));
+  test("A is nonsingular", "A is singular", A_inverse != NULL);
+  test_matrix_are_equal("A⁻¹", "R", A_inverse, R);
 }
 
 /*
@@ -249,9 +249,9 @@ void problem_4_6() {
   matrix_set(A, 2, 1, 8);
   matrix_set(A, 2, 2, 9);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
-  test("A is singular", "A is nonsingular", A_inv == NULL);
+  test("A is singular", "A is nonsingular", A_inverse == NULL);
 }
 
 /*
@@ -294,7 +294,7 @@ void problem_4_7() {
   matrix_scalar_multiply(R, 0.25);
 
   test("A is nonsingular", "A is singular", A_inverse != NULL);
-  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inverse, R));
+  test_matrix_are_equal("A⁻¹", "R", A_inverse, R);
 }
 
 /*
@@ -327,7 +327,7 @@ void problem_4_8() {
   matrix_set(R, 0, 0, -11);
   matrix_set(R, 1, 0, 21);
 
-  test("X = R", "X ≠ R", matrix_are_equal(X, R));
+  test_matrix_are_equal("X", "R", X, R);
 }
 
 /*
@@ -369,7 +369,7 @@ void problem_4_9() {
   matrix_set(R, 1, 0, 5.0 / 2.0);
   matrix_set(R, 2, 0, -1.0 / 2.0);
 
-  test("X = R", "X ≠ R", matrix_are_equal(X, R));
+  test_matrix_are_equal("X", "R", X, R);
 }
 
 int main() {

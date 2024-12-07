@@ -83,8 +83,8 @@ void problem_3_4() {
 
   MatrixLUDecompositionResult *LU = matrix_lu_decomposition(A);
 
-  test("L = R_L", "L ≠ R_L", matrix_are_equal(LU->L, R_L));
-  test("U = R_U", "U ≠ R_U", matrix_are_equal(LU->U, R_U));
+  test_matrix_are_equal("L", "R_L", LU->L, R_L);
+  test_matrix_are_equal("U", "R_U", LU->U, R_U);
 }
 
 /*
@@ -201,8 +201,8 @@ void problem_3_6() {
 
   MatrixLUDecompositionResult *LU = matrix_lu_decomposition(A);
 
-  test("L = R_L", "L ≠ R_L", matrix_are_equal(LU->L, R_L));
-  test("U = R_U", "U ≠ R_U", matrix_are_equal(LU->U, R_U));
+  test_matrix_are_equal("L", "R_L", LU->L, R_L);
+  test_matrix_are_equal("U", "R_U", LU->U, R_U);
 }
 
 /*
@@ -242,9 +242,8 @@ void problem_3_10() {
   matrix_set(R_A_squared_squared, 1, 0, 100);
   matrix_set(R_A_squared_squared, 1, 1, -75);
 
-  test("A² = R_A²", "A² ≠ R_A²", matrix_are_equal(A_squared, R_A_squared));
-  test("A⁴ = R_A⁴", "A⁴ ≠ R_A⁴",
-       matrix_are_equal(A_squared_squared, R_A_squared_squared));
+  test_matrix_are_equal("A²", "R_A²", A_squared, R_A_squared);
+  test_matrix_are_equal("A⁴", "R_A⁴", A_squared_squared, R_A_squared_squared);
 }
 
 /*
