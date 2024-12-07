@@ -94,7 +94,7 @@ void problem_4_3() {
   matrix_set(A, 2, 1, 0);
   matrix_set(A, 2, 2, 3);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
   Matrix *R = matrix_create(3, 3);
   matrix_set(R, 0, 0, 1.0 / 2.0);
@@ -107,8 +107,8 @@ void problem_4_3() {
   matrix_set(R, 2, 1, 0);
   matrix_set(R, 2, 2, 1.0 / 3.0);
 
-  test("A is nonsingular", "A is singular", A_inv != NULL);
-  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inv, R));
+  test("A is nonsingular", "A is singular", A_inverse != NULL);
+  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inverse, R));
 }
 
 /*
@@ -170,8 +170,8 @@ void problem_4_4() {
   matrix_set(B, 3, 2, 3);
   matrix_set(B, 3, 3, 3);
 
-  Matrix *A_inv = matrix_inverse(A);
-  Matrix *B_inv = matrix_inverse(B);
+  Matrix *A_inverse = matrix_inverse(A);
+  Matrix *B_inverse = matrix_inverse(B);
 
   Matrix *R = matrix_create(4, 4);
   matrix_set(R, 0, 0, -1);
@@ -191,9 +191,9 @@ void problem_4_4() {
   matrix_set(R, 3, 2, 1.0 / 2.0);
   matrix_set(R, 3, 3, 1.0 / 3.0);
 
-  test("A is singular", "A is nonsingular", A_inv == NULL);
-  test("B is nonsingular", "B is singular", B_inv != NULL);
-  test("B⁻¹ = R", "B⁻¹ ≠ R", matrix_are_equal(B_inv, R));
+  test("A is singular", "A is nonsingular", A_inverse == NULL);
+  test("B is nonsingular", "B is singular", B_inverse != NULL);
+  test("B⁻¹ = R", "B⁻¹ ≠ R", matrix_are_equal(B_inverse, R));
 }
 
 /*
@@ -279,7 +279,7 @@ void problem_4_7() {
   matrix_set(A, 2, 1, -3);
   matrix_set(A, 2, 2, -3);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
   Matrix *R = matrix_create(3, 3);
   matrix_set(R, 0, 0, 6);
@@ -293,8 +293,8 @@ void problem_4_7() {
   matrix_set(R, 2, 2, 5);
   matrix_scalar_multiply(R, 0.25);
 
-  test("A is nonsingular", "A is singular", A_inv != NULL);
-  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inv, R));
+  test("A is nonsingular", "A is singular", A_inverse != NULL);
+  test("A⁻¹ = R", "A⁻¹ ≠ R", matrix_are_equal(A_inverse, R));
 }
 
 /*
@@ -315,13 +315,13 @@ void problem_4_8() {
   matrix_set(A, 1, 0, 2);
   matrix_set(A, 1, 1, 1);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
   Matrix *B = matrix_create(2, 1);
   matrix_set(B, 0, 0, 8);
   matrix_set(B, 1, 0, -1);
 
-  Matrix *X = matrix_matrix_multiply(A_inv, B);
+  Matrix *X = matrix_matrix_multiply(A_inverse, B);
 
   Matrix *R = matrix_create(2, 1);
   matrix_set(R, 0, 0, -11);
@@ -355,14 +355,14 @@ void problem_4_9() {
   matrix_set(A, 2, 1, -3);
   matrix_set(A, 2, 2, -3);
 
-  Matrix *A_inv = matrix_inverse(A);
+  Matrix *A_inverse = matrix_inverse(A);
 
   Matrix *B = matrix_create(3, 1);
   matrix_set(B, 0, 0, 2);
   matrix_set(B, 1, 0, 3);
   matrix_set(B, 2, 0, -6);
 
-  Matrix *X = matrix_matrix_multiply(A_inv, B);
+  Matrix *X = matrix_matrix_multiply(A_inverse, B);
 
   Matrix *R = matrix_create(3, 1);
   matrix_set(R, 0, 0, 0);

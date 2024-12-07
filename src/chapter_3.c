@@ -226,24 +226,25 @@ void problem_3_10() {
   matrix_set(A, 1, 0, 4);
   matrix_set(A, 1, 1, 3);
 
-  Matrix *A_2 = matrix_matrix_multiply(A, A);
+  Matrix *A_squared = matrix_matrix_multiply(A, A);
 
-  Matrix *A_4 = matrix_matrix_multiply(A_2, A_2);
+  Matrix *A_squared_squared = matrix_matrix_multiply(A_squared, A_squared);
 
-  Matrix *R_A_2 = matrix_create(2, 2);
-  matrix_set(R_A_2, 0, 0, 0);
-  matrix_set(R_A_2, 0, 1, -5);
-  matrix_set(R_A_2, 1, 0, 20);
-  matrix_set(R_A_2, 1, 1, 5);
+  Matrix *R_A_squared = matrix_create(2, 2);
+  matrix_set(R_A_squared, 0, 0, 0);
+  matrix_set(R_A_squared, 0, 1, -5);
+  matrix_set(R_A_squared, 1, 0, 20);
+  matrix_set(R_A_squared, 1, 1, 5);
 
-  Matrix *R_A_4 = matrix_create(2, 2);
-  matrix_set(R_A_4, 0, 0, -100);
-  matrix_set(R_A_4, 0, 1, -25);
-  matrix_set(R_A_4, 1, 0, 100);
-  matrix_set(R_A_4, 1, 1, -75);
+  Matrix *R_A_squared_squared = matrix_create(2, 2);
+  matrix_set(R_A_squared_squared, 0, 0, -100);
+  matrix_set(R_A_squared_squared, 0, 1, -25);
+  matrix_set(R_A_squared_squared, 1, 0, 100);
+  matrix_set(R_A_squared_squared, 1, 1, -75);
 
-  test("A² = R_A²", "A² ≠ R_A²", matrix_are_equal(A_2, R_A_2));
-  test("A⁴ = R_A⁴", "A⁴ ≠ R_A⁴", matrix_are_equal(A_4, R_A_4));
+  test("A² = R_A²", "A² ≠ R_A²", matrix_are_equal(A_squared, R_A_squared));
+  test("A⁴ = R_A⁴", "A⁴ ≠ R_A⁴",
+       matrix_are_equal(A_squared_squared, R_A_squared_squared));
 }
 
 /*
@@ -267,16 +268,16 @@ void problem_3_11() {
   matrix_set(A, 2, 1, -1);
   matrix_set(A, 2, 2, -3);
 
-  Matrix *A_2 = matrix_matrix_multiply(A, A);
-  Matrix *A_3 = matrix_matrix_multiply(A_2, A);
+  Matrix *A_squared = matrix_matrix_multiply(A, A);
+  Matrix *A_cubed = matrix_matrix_multiply(A_squared, A);
 
-  Matrix *A9 = matrix_scalar_multiplied(A, -9);
+  Matrix *A_times_9 = matrix_scalar_multiplied(A, -9);
 
-  Matrix *I10 = matrix_create_identity(3);
-  matrix_scalar_multiply(I10, 10);
+  Matrix *I_times_10 = matrix_create_identity(3);
+  matrix_scalar_multiply(I_times_10, 10);
 
-  Matrix *R = matrix_sum(A_3, A9);
-  matrix_add(R, I10);
+  Matrix *R = matrix_sum(A_cubed, A_times_9);
+  matrix_add(R, I_times_10);
 
   // NOTE Zero row rank is equivalent to checking all elements for zero
   test("A³ - 9A + 10I = 0", "A³ - 9A + 10I ≠ 0", matrix_row_rank(R) == 0);

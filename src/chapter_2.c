@@ -38,9 +38,9 @@ void problem_2_2() {
   matrix_set(B, 1, 0, 1);
   matrix_set(B, 2, 0, 8);
 
-  PartitionedMatrix *AX_B = partitioned_matrix_create(3, 4, 1, 2);
-  partitioned_matrix_set_matrix(AX_B, 0, 0, A);
-  partitioned_matrix_set_matrix(AX_B, 0, 1, B);
+  PartitionedMatrix *augmented = partitioned_matrix_create(3, 4, 1, 2);
+  partitioned_matrix_set_matrix(augmented, 0, 0, A);
+  partitioned_matrix_set_matrix(augmented, 0, 1, B);
 
   Matrix *R = matrix_create(3, 4);
   matrix_set(R, 0, 0, 2);
@@ -55,7 +55,7 @@ void problem_2_2() {
   matrix_set(R, 2, 2, 1);
   matrix_set(R, 2, 3, 8);
 
-  test("A|B = R", "A|B ≠ R", matrix_are_equal(AX_B->M, R));
+  test("A|B = R", "A|B ≠ R", matrix_are_equal(augmented->M, R));
 }
 
 /*
@@ -90,9 +90,9 @@ void problem_2_13() {
 
   System *S = system_create(A, B);
 
-  PartitionedMatrix *AX_B_ = system_solve(S);
+  PartitionedMatrix *augmented = system_solve(S);
 
-  Matrix *B_ = partitioned_matrix_get_matrix(AX_B_, 0, 1);
+  Matrix *B_prime = partitioned_matrix_get_matrix(augmented, 0, 1);
 
   Matrix *R = matrix_create(3, 1);
   matrix_set(R, 0, 0, 1);
@@ -101,7 +101,7 @@ void problem_2_13() {
 
   test("consistent", "not consistent", system_is_consistent(S));
   test("unique solution", "no unique solution", system_has_unique_solution(S));
-  test("B = R", "B ≠ R", matrix_are_equal(B_, R));
+  test("B′ = R", "B′ ≠ R", matrix_are_equal(B_prime, R));
 }
 
 /*

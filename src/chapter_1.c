@@ -69,10 +69,10 @@ void problem_1_2() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_ = matrix_sum(A, B);
-  Matrix *B_ = matrix_sum(B, A);
+  Matrix *A_plus_B = matrix_sum(A, B);
+  Matrix *B_plus_A = matrix_sum(B, A);
 
-  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_, B_));
+  test("A+B = B+A", "A+B ≠ B+A", matrix_are_equal(A_plus_B, B_plus_A));
 }
 
 /*
@@ -95,10 +95,10 @@ void problem_1_3() {
   matrix_set(B, 1, 0, 6);
   matrix_set(B, 1, 1, -7);
 
-  Matrix *A_ = matrix_scalar_multiplied(A, 3);
-  Matrix *B_ = matrix_scalar_multiplied(B, -0.5);
+  Matrix *A_times_3 = matrix_scalar_multiplied(A, 3);
+  Matrix *B_times_negative_half = matrix_scalar_multiplied(B, -0.5);
 
-  Matrix *A_B_ = matrix_sum(A_, B_);
+  Matrix *A_times_plus_B_times = matrix_sum(A_times_3, B_times_negative_half);
 
   Matrix *R = matrix_create(2, 2);
   matrix_set(R, 0, 0, -2);
@@ -106,7 +106,8 @@ void problem_1_3() {
   matrix_set(R, 1, 0, 3);
   matrix_set(R, 1, 1, 12.5);
 
-  test("3A - 0.5B = R", "3A - 0.5B ≠ R", matrix_are_equal(A_B_, R));
+  test("3A - 0.5B = R", "3A - 0.5B ≠ R",
+       matrix_are_equal(A_times_plus_B_times, R));
 }
 
 /*
@@ -217,14 +218,16 @@ void problem_1_6() {
   matrix_set(B, 0, 1, 8);
   matrix_set(B, 1, 1, -9);
 
-  Matrix *A_T = matrix_transpose(A);
-  Matrix *B_T = matrix_transpose(B);
-  Matrix *A_T_B_T = matrix_matrix_multiply(A_T, B_T);
+  Matrix *A_transpose = matrix_transpose(A);
+  Matrix *B_transpose = matrix_transpose(B);
+  Matrix *A_transpose_B_transpose =
+      matrix_matrix_multiply(A_transpose, B_transpose);
 
   Matrix *BA = matrix_matrix_multiply(B, A);
-  Matrix *BA_T = matrix_transpose(BA);
+  Matrix *BA_transpose = matrix_transpose(BA);
 
-  test("(BA)ᵀ = AᵀBᵀ", "(BA)ᵀ ≠ AᵀBᵀ", matrix_are_equal(BA_T, A_T_B_T));
+  test("(BA)ᵀ = AᵀBᵀ", "(BA)ᵀ ≠ AᵀBᵀ",
+       matrix_are_equal(BA_transpose, A_transpose_B_transpose));
 }
 
 /*
@@ -372,11 +375,11 @@ void problem_1_8() {
   matrix_set(F, 1, 0, -1);
   matrix_set(F, 1, 1, -2);
 
-  PartitionedMatrix *A_BCEF = partitioned_matrix_create(3, 4, 2, 2);
-  partitioned_matrix_set_matrix(A_BCEF, 0, 0, B);
-  partitioned_matrix_set_matrix(A_BCEF, 0, 1, C);
-  partitioned_matrix_set_matrix(A_BCEF, 1, 0, E);
-  partitioned_matrix_set_matrix(A_BCEF, 1, 1, F);
+  PartitionedMatrix *BCEF = partitioned_matrix_create(3, 4, 2, 2);
+  partitioned_matrix_set_matrix(BCEF, 0, 0, B);
+  partitioned_matrix_set_matrix(BCEF, 0, 1, C);
+  partitioned_matrix_set_matrix(BCEF, 1, 0, E);
+  partitioned_matrix_set_matrix(BCEF, 1, 1, F);
 
   Matrix *G = matrix_create(3, 3);
   matrix_set(G, 0, 0, 1);
@@ -392,12 +395,12 @@ void problem_1_8() {
   matrix_set(H, 1, 0, 6);
   matrix_set(H, 2, 0, -2);
 
-  PartitionedMatrix *A_GH = partitioned_matrix_create(3, 4, 1, 2);
-  partitioned_matrix_set_matrix(A_GH, 0, 0, G);
-  partitioned_matrix_set_matrix(A_GH, 0, 1, H);
+  PartitionedMatrix *GH = partitioned_matrix_create(3, 4, 1, 2);
+  partitioned_matrix_set_matrix(GH, 0, 0, G);
+  partitioned_matrix_set_matrix(GH, 0, 1, H);
 
-  test("A = A_BCEF", "A ≠ A_BCEF", matrix_are_equal(A, A_BCEF->M));
-  test("A = A_GH", "A ≠ A_GH", matrix_are_equal(A, A_GH->M));
+  test("A = A_BCEF", "A ≠ A_BCEF", matrix_are_equal(A, BCEF->M));
+  test("A = A_GH", "A ≠ A_GH", matrix_are_equal(A, GH->M));
 }
 
 /*
